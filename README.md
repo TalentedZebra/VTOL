@@ -8,6 +8,4 @@ A static, GitHub-Pages-ready site for a tilt-rotor tricopter VTOL project: hover
 
 ## Live site
 
-Once GitHub Pages is enabled for this repo (Settings → Pages → Deploy from a branch → `main` → `/ (root)`), the site will be live at:
-
-`https://talentedzebra.github.io/VTOL/`
+**https://talentedzebra.github.io/VTOL/**
