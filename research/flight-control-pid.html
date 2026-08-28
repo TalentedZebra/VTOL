@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flight Control &amp; PID Tuning &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 04</span>
+      <h1>Flight Control &amp; PID Tuning</h1>
+    </div>
+
+    <div class="article">
+      <h2>What a flight controller is actually doing</h2>
+      <p>At its core, a flight controller runs a loop, hundreds of times per second: read sensors (gyroscope, accelerometer, sometimes magnetometer/barometer/GPS/airspeed), estimate the aircraft's current attitude and rates from that noisy sensor data, compare that estimate to what the pilot (or autopilot) is commanding, compute a correction, and send updated commands to the motors and control surfaces. Everything else &mdash; GPS waypoints, stabilization modes, failsafes &mdash; is built on top of that basic loop.</p>
+      <p><strong>Sensor fusion</strong> is the step of combining a gyroscope (which measures rotation rate very accurately over short timescales but drifts over time) with an accelerometer (which can sense the direction of gravity to correct that drift, but is noisy and gets confused by the aircraft's own acceleration). A complementary filter &mdash; a simple weighted blend that trusts the gyro in the short term and the accelerometer in the long term &mdash; is what dRehmFlight uses, and it's a great first filter to actually read the code for, since it's simple enough to fully understand rather than take on faith. More capable systems (including ArduPilot) use a full Extended Kalman Filter, which does the same job more rigorously by explicitly modeling sensor noise and uncertainty.</p>
+
+      <h2>PID control, term by term</h2>
+      <p>A PID controller computes a correction as the sum of three terms based on the <strong>error</strong> (the difference between where you want to be and where you are):</p>
+      <p class="mono equation">u(t) = K<sub>p</sub>&middot;e(t) &plus; K<sub>i</sub>&middot;&int;&#8320;<sup>t</sup> e(&tau;) d&tau; &plus; K<sub>d</sub>&middot;de(t)/dt</p>
+      <ul>
+        <li><strong>Proportional (P)</strong> &mdash; react in proportion to the current error, right now. This is the term that does most of the work; too little P and the aircraft feels sluggish and mushy, too much and it oscillates.</li>
+        <li><strong>Integral (I)</strong> &mdash; accumulate error over time and correct for it. This is what eliminates steady-state error &mdash; for example, a persistent trim offset from a slightly heavy wingtip that P alone would never fully correct, because P only reacts to error that still exists right now. Too much I causes slow, growing oscillations ("wind-up").</li>
+        <li><strong>Derivative (D)</strong> &mdash; react to how fast the error is changing, which acts as a brake against overshoot. Too little D and the aircraft overshoots and bounces around the target; too much D amplifies sensor noise into visible motor jitter, since D is mathematically a rate-of-change calculation and rate-of-change amplifies noise.</li>
+      </ul>
+
+      <h2>Why tuning is done incrementally, one axis at a time</h2>
+      <p>Pitch, roll, and yaw each get their own PID gains, and hover-mode gains are usually tuned completely separately from cruise-mode gains, because the aircraft's dynamics genuinely change between the two (different effective control authority, different disturbance sources, different mass distribution relative to the control inputs). The standard practical tuning method &mdash; and the one built into most guided tuning workflows &mdash; is: start with only P, raise it until you see the first hint of oscillation, back off slightly, then bring in D to damp overshoot, then bring in just enough I to kill any remaining steady-state drift. Changing more than one gain at a time makes it far harder to tell which change caused which behavior, which is why "one axis, one gain, one small change at a time" is the rule almost every tuning guide repeats.</p>
+
+      <h2>Rate mode vs. attitude mode</h2>
+      <p>Most flight controllers offer at least two stabilization levels: <strong>rate mode</strong>, where stick input commands a rotation <em>rate</em> and the aircraft will keep rotating as long as you hold the stick (this is usually what acro/manual mode is doing), and <strong>attitude/self-level mode</strong>, where stick input commands a target <em>angle</em> and an outer control loop holds that angle, automatically leveling when the stick is centered. A cascaded controller &mdash; an outer attitude loop whose output feeds into an inner rate loop &mdash; is the typical structure. For a first hover, self-level/attitude-hold modes are far more forgiving to fly and to debug than rate mode.</p>
+
+      <h2>Gain scheduling across flight modes</h2>
+      <p>Because your tilt-rotor's control authority genuinely changes with tilt angle and airspeed (differential thrust dominates in hover, control surfaces dominate in cruise, and both partially work during transition), a single fixed set of PID gains rarely performs equally well everywhere in the envelope. This is why more mature VTOL implementations schedule or blend gains as a function of tilt angle/airspeed rather than using one static tune for the whole flight &mdash; something worth planning for once your basic hover and cruise tunes are each independently solid.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://engineering.purdue.edu/~zak/ECE_382-Fall_2018/IntroPID_16.pdf" target="_blank" rel="noopener">Purdue ECE 382 &mdash; An Introduction to PID Controllers (PDF)</a> &mdash; a rigorous but readable university-level treatment of the math.</li>
+        <li><a href="https://oscarliang.com/pid/" target="_blank" rel="noopener">Oscar Liang &mdash; FPV Drone PID Explained</a> &mdash; tuning intuition and symptoms-to-gain-adjustment mapping, written for exactly this kind of aircraft.</li>
+        <li><a href="https://apmonitor.com/pdc/index.php/Main/ProportionalIntegralDerivative" target="_blank" rel="noopener">APMonitor &mdash; Proportional Integral Derivative (PID)</a> &mdash; interactive control-theory reference with simulations.</li>
+        <li><a href="https://github.com/nickrehm/dRehmFlight" target="_blank" rel="noopener">dRehmFlight source (GitHub)</a> &mdash; read the actual control loop and complementary filter implementation; there's no substitute for reading real, working code.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

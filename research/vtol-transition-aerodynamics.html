@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VTOL Transition Aerodynamics &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 03</span>
+      <h1>VTOL Transition Aerodynamics</h1>
+    </div>
+
+    <div class="article">
+      <h2>Two flight regimes, one airframe</h2>
+      <p>A tilt-rotor tricopter has to work in two completely different aerodynamic regimes, and the transition between them is the single hardest part of the whole flight envelope to get right.</p>
+      <p><strong>In hover</strong>, airspeed is (ideally) zero. The wing generates essentially no useful lift &mdash; recall from the lift equation that lift scales with V&sup2;, so at low airspeed it's negligible no matter how big the wing is. All of the aircraft's weight is supported directly by rotor thrust, split across the three motors, and control comes from differential thrust and the front motors' tilt angle rather than from control surfaces (which have no airflow over them to bite into).</p>
+      <p><strong>In cruise</strong>, the wing is doing essentially all the lift-generating work, thrust just needs to overcome drag, and the front motors are rotated fully forward acting like a conventional twin-engine airplane. Control comes from the elevons the way it would on any fixed-wing aircraft.</p>
+      <p><strong>Transition</strong> is the process of moving between these two states &mdash; tilting the front motors from vertical toward horizontal while pitching and accelerating the aircraft &mdash; during which lift is gradually handing off from rotor thrust to wing lift, and control authority is gradually handing off from thrust-vectoring to control surfaces.</p>
+
+      <h2>The conversion corridor</h2>
+      <p>Tiltrotor engineers describe a <strong>conversion corridor</strong>: at any given tilt angle, there's a minimum airspeed (below which the wing would stall or the aircraft doesn't have enough combined lift) and a maximum airspeed (above which loads or prop efficiency at that tilt angle become a problem) within which the transition must happen safely. Outside that speed range for a given tilt angle, you're either asking the rotors to do more than they safely can, or asking the wing to do more than it can before stalling.</p>
+      <p>For a small hobby-scale tilt-rotor, this is less a precisely computed corridor than a practical rule your flight controller (or you, on the sticks, if you're transitioning manually) needs to respect: <strong>don't rush the tilt relative to your airspeed</strong>. Tilting the motors forward before you have enough airspeed for the wing to pick up the slack means a sudden loss of vertical lift &mdash; the classic "falls out of the sky mid-transition" failure. Tilting too slowly relative to a climbing airspeed just wastes altitude and battery. This is why ArduPilot's QuadPlane/tilt-rotor implementation ties the tilt schedule to actual measured airspeed (via an airspeed sensor) rather than a fixed timer wherever possible, and why dRehmFlight-based DIY builds typically use a manual, pilot-controlled tilt stick during the transition on early flights rather than a fully automatic schedule &mdash; it puts a human in the loop who can feel if something's going wrong and abort back to hover.</p>
+
+      <h2>Why the tricopter tilt-rotor is more forgiving than a tailsitter here</h2>
+      <p>Because the fuselage stays roughly level throughout a tilt-rotor's transition, the aircraft's attitude-hold problem is comparatively simple &mdash; pitch and roll control authority shifts gradually from thrust-vectoring to aerodynamic surfaces, but the reference orientation (level) doesn't change. A tailsitter, by contrast, has to rotate its entire body through roughly 90&deg; of pitch during transition, meaning gravity's effect on the aircraft (and on the pilot's/controller's sense of "up") is itself rotating through the maneuver &mdash; a genuinely harder attitude-estimation and control problem, which is a large part of why tailsitters have a reputation as the more advanced VTOL configuration to get right.</p>
+
+      <h2>Practical implications for flight testing</h2>
+      <ul>
+        <li>Always transition with altitude to spare &mdash; a failed or aborted transition costs altitude fast, and you want room to recover to stable hover.</li>
+        <li>Fly the reverse transition (cruise back to hover) with just as much caution as the forward one; it's not automatically easier just because you've already proven forward transition works.</li>
+        <li>Log airspeed, tilt angle, and throttle through every transition attempt if your flight controller can record it &mdash; this is the data that turns "it felt wrong" into an actual diagnosis.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://ardupilot.org/plane/docs/guide-tilt-rotor.html" target="_blank" rel="noopener">ArduPilot &mdash; Tilt Rotor Planes</a> and <a href="https://ardupilot.org/plane/docs/tailsitter-tuning-guide.html" target="_blank" rel="noopener">VTOL tuning guide</a> &mdash; practical, implementation-level guidance on transition tuning and failure modes.</li>
+        <li><a href="https://pure.manchester.ac.uk/ws/files/195430043/interaction_effects_on_the_conversion_corridor_of_tiltrotor_aircraft.pdf" target="_blank" rel="noopener">Interaction effects on the conversion corridor of tiltrotor aircraft (Univ. of Manchester, PDF)</a> &mdash; a real academic treatment of the conversion corridor concept, for when you want the full-depth version.</li>
+        <li><a href="https://www.drehmflight.com/drehmflight-vtol" target="_blank" rel="noopener">dRehmFlight VTOL</a> &mdash; documents manual-transition tilt-rotor and tailsitter builds in detail, including footage of what a transition attempt actually looks like in practice.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

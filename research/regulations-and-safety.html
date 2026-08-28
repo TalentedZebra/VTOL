@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regulations &amp; Safety &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 06</span>
+      <h1>Regulations &amp; Safety</h1>
+    </div>
+
+    <div class="article">
+      <p class="lede">Rules change &mdash; always re-check the FAA and AMA sources linked below before you fly, rather than treating this page as the final word. This reflects the rules as researched in 2026.</p>
+
+      <h2>Recreational vs. Part 107</h2>
+      <p>If you're flying this purely for personal enjoyment (not for any compensation, business use, or as part of paid work), you fall under the FAA's recreational flyer rules rather than needing a Part 107 Remote Pilot Certificate. The moment flying becomes connected to any compensation or business purpose, Part 107 applies instead &mdash; a real distinction, not a formality, and Part 107 pilots must register every aircraft regardless of weight.</p>
+
+      <h2>What recreational flying actually requires</h2>
+      <ul>
+        <li><strong>TRUST certificate</strong> &mdash; every recreational pilot must pass the free Recreational UAS Safety Test. It's untimed, you can't fail (you re-answer questions until you get 100%), and takes under half an hour. Do this before your first flight, not the week of it.</li>
+        <li><strong>Registration</strong> &mdash; required for any aircraft over 0.55 lb (250 g); a small tilt-rotor tricopter with motors, battery, and a flight controller will almost certainly clear that threshold. Registration is done through FAADroneZone, costs a small fee, and is valid for three years.</li>
+        <li><strong>Remote ID</strong> &mdash; aircraft requiring registration must broadcast Remote ID (a digital "license plate" broadcasting identification and location). Many modern flight controllers/GPS modules support this natively; older or DIY setups may need an add-on module. Flying within an FAA-Recognized Identification Area (FRIA) is the alternative if your aircraft doesn't have Remote ID capability.</li>
+        <li><strong>Operating rules</strong> &mdash; stay below 400 ft AGL, maintain visual line of sight without aids, don't fly over people or moving vehicles, yield right-of-way to manned aircraft, and get LAANC authorization before flying in controlled (Class B/C/D) airspace. Some areas &mdash; national parks, restricted zones like the Washington D.C. area &mdash; are off-limits entirely.</li>
+      </ul>
+
+      <h2>Why an AMA-affiliated field is worth using</h2>
+      <p>Academy of Model Aeronautics membership is inexpensive and, notably, typically includes liability insurance coverage while flying at AMA-sanctioned sites and events &mdash; meaningful for an experimental aircraft that's most likely to have something go wrong during exactly the phase you're testing (transition). Flying at a club field also usually means open, cleared airspace, other experienced builders around who can help spot problems before they become expensive, and &mdash; for a first VTOL specifically &mdash; the psychological benefit of not testing over your own or a neighbor's property.</p>
+      <p>For Texas A&amp;M students, Brazos Valley R/C is the local AMA-affiliated club for the College Station/Bryan area and is worth contacting well before your first flight test, not the week you're ready to fly.</p>
+
+      <h2>Physical safety habits worth making automatic</h2>
+      <ul>
+        <li>Treat every propeller as if it's about to spin the moment a battery is connected &mdash; never reach across, near, or through a prop arc with a battery plugged in, even "just to check something."</li>
+        <li>Charge and store LiPo batteries in a fireproof bag or ammo-can-style container, away from anything flammable, and never charge unattended.</li>
+        <li>Never fully discharge a LiPo pack (below ~3.0V/cell) &mdash; it degrades the cells and increases fire risk; most flight controllers can be configured to warn or fail-safe well above that.</li>
+        <li>Do a full control-direction and range-of-motion check, and a battery voltage check, before every single flight &mdash; a written pre-flight checklist beats memory, especially once the routine feels familiar enough to get complacent about.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://pilotinstitute.com/recreational-drone-pilots-rules/" target="_blank" rel="noopener">FAA Recreational Drone Pilot Rules (Pilot Institute overview)</a> &mdash; a clear, currently-maintained summary; cross-check against the FAA's own site for anything decision-critical.</li>
+        <li><a href="https://www.modelaircraft.org/membershipfaqs" target="_blank" rel="noopener">Academy of Model Aeronautics &mdash; Membership FAQ</a></li>
+        <li><a href="https://amablog.modelaircraft.org/blog/ama-insurance-plans/" target="_blank" rel="noopener">AMA Insurance Plans</a></li>
+        <li><a href="https://flybvrc.com/" target="_blank" rel="noopener">Brazos Valley R/C</a> &mdash; the local College Station/Bryan flying club.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

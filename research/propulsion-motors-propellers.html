@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propulsion: Propellers, Motors, ESCs &amp; Batteries &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 02</span>
+      <h1>Propulsion: Propellers, Motors, ESCs, and Batteries</h1>
+    </div>
+
+    <div class="article">
+      <h2>Propeller theory: how a spinning blade makes thrust</h2>
+      <p>The simplest useful model is <strong>momentum (actuator disk) theory</strong>: treat the propeller as an infinitely thin disk that accelerates the air passing through it. The propeller takes in air at the free-stream velocity and accelerates it, and the thrust produced equals the rate of change of momentum of that air:</p>
+      <p class="mono equation">T = &#7745; &Delta;V</p>
+      <p>where &#7745; is the mass flow rate of air through the disk and &Delta;V is the velocity increase it imparts. The power required to do this, in ideal hover (zero forward speed), works out to:</p>
+      <p class="mono equation">P = T<sup>3/2</sup> / &radic;(2 &rho; A)</p>
+      <p>where A is the propeller's disk area (&pi;r&sup2;) and &rho; is air density. The term that matters most for a hobbyist: power required to hover scales with T<sup>1.5</sup>, but drops with the <strong>square root of disk area</strong>. In plain terms &mdash; a bigger, slower-spinning propeller producing the same thrust is dramatically more power-efficient than a smaller, faster one. This is exactly why heavy-lift multirotors use big, low-kV motors with large props instead of small, screaming-fast ones, and it's the same reason your rear (hover-dedicated) motor benefits from being sized generously rather than minimally.</p>
+      <p><strong>Disk loading</strong> (thrust &divide; disk area) is the practical way people compare this across aircraft: helicopters have low disk loading and are efficient hoverers; jets have effectively infinite disk loading and are terrible at hovering. Your tilt-rotor tricopter sits closer to the helicopter end of that spectrum in hover mode, which is exactly why VTOL hover is inherently power-hungry compared to cruise flight on the wing.</p>
+      <p>Real propellers lose some efficiency relative to this ideal (tip losses, blade drag, swirl in the wake) &mdash; actual <strong>Blade Element Momentum Theory (BEMT)</strong> accounts for this by analyzing each radial slice of the blade as its own small airfoil, which is what tools like eCalc are doing behind the scenes when you plug in a prop's diameter and pitch.</p>
+
+      <h2>Brushless motors: what kV actually means</h2>
+      <p>A brushless DC motor has no brushes to wear out &mdash; instead, the ESC electronically switches (commutates) current through a set of stator windings in sequence, creating a rotating magnetic field that drags the permanent-magnet rotor around with it. This is why a brushless motor needs an ESC to run at all; it can't just be wired to a battery like a brushed motor.</p>
+      <p><strong>kV</strong> is the motor's unloaded RPM per volt applied &mdash; a 1000kV motor free-spins at roughly 1000 RPM per volt (a 4S LiPo at ~16.8V fully charged would free-spin it near 16,800 RPM, before any propeller load pulls that down). Lower-kV motors are wound with more turns of thinner wire: more torque per amp, less RPM per volt &mdash; a better match for big, slow propellers. Higher-kV motors do the opposite &mdash; more RPM, less torque per amp &mdash; a match for small, fast propellers. Getting kV badly mismatched to your propeller is one of the most common first-build mistakes: too high a kV for your prop size and you'll draw excessive current and overheat the motor; too low and you'll be underpowered no matter how large a battery you strap on.</p>
+
+      <h2>ESCs</h2>
+      <p>The Electronic Speed Controller reads a throttle command from the flight controller and switches the three motor phases on and off in the right sequence and timing (using either sensor feedback or, far more commonly on small aircraft, sensorless back-EMF detection) to spin the motor at the commanded speed. ESCs are rated by continuous/burst current &mdash; always leave real headroom between your calculated peak current draw and the ESC's rating, since running an ESC near its limit for sustained hover is a common cause of thermal failure mid-flight.</p>
+
+      <h2>Batteries: LiPo basics</h2>
+      <p>Lithium polymer batteries are prized in RC/drone use for their high energy density and high discharge rates, at the cost of being genuinely more fire-prone than most consumer battery chemistries if damaged, punctured, over-discharged, or charged incorrectly.</p>
+      <p>Two numbers matter constantly:</p>
+      <ul>
+        <li><strong>Capacity (mAh)</strong> &mdash; how much energy it stores; roughly, more capacity for the same cell count means more flight time but more weight.</li>
+        <li><strong>C-rating</strong> &mdash; the manufacturer's claimed continuous discharge rate as a multiple of capacity. A 1300mAh 30C pack can theoretically sustain 1.3A &times; 30 = 39A continuous. In practice, real-world sustained current is often lower than the printed rating, especially as the pack ages &mdash; treat C-ratings as optimistic marketing more than a lab-verified spec, and size with margin.</li>
+      </ul>
+      <p><strong>Voltage sag</strong> is the voltage drop under load &mdash; a fresh 4S pack reads about 16.8V resting but might sag to 14.5&ndash;15V under full hover throttle. This is normal, but it's also why your ESCs, motors, and flight controller failsafe voltages all need to account for sag rather than assuming resting voltage, and why a pack that seemed fine on the bench can trigger a low-voltage failsafe mid-hover.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://www.grc.nasa.gov/WWW/K-12/VirtualAero/BottleRocket/airplane/propth.html" target="_blank" rel="noopener">NASA &mdash; Propeller Thrust</a> &mdash; the momentum-theory derivation in NASA's own beginner format.</li>
+        <li><a href="https://www.mh-aerotools.de/airfoils/prpstati.htm" target="_blank" rel="noopener">Static Thrust of Propellers (mh-aerotools)</a> &mdash; a long-standing, detailed hobbyist-technical reference on real propeller performance.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Propeller_theory" target="_blank" rel="noopener">Propeller theory (Wikipedia)</a> &mdash; a broader overview linking momentum theory to blade element theory.</li>
+        <li><a href="https://www.tytorobotics.com/blogs/articles/how-brushless-motors-work" target="_blank" rel="noopener">Tyto Robotics &mdash; How Brushless Motors Work</a> &mdash; clear technical explanation of commutation and kV.</li>
+        <li><a href="https://oscarliang.com/lipo-battery-guide/" target="_blank" rel="noopener">Oscar Liang &mdash; LiPo Battery Guide</a> &mdash; widely used, practically-oriented reference in the FPV/drone-building community.</li>
+        <li><a href="https://www.ecalc.ch/" target="_blank" rel="noopener">eCalc</a> &mdash; plug in real motor/prop/battery combinations and get BEMT-based performance predictions instead of hand-calculating.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

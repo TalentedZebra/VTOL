@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aerodynamics &amp; Airfoil Design &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 01</span>
+      <h1>Aerodynamics &amp; Airfoil Design</h1>
+    </div>
+
+    <div class="article">
+      <h2>What an airfoil actually is</h2>
+      <p>An airfoil is the cross-sectional shape of a wing, seen edge-on. A few terms you'll see constantly:</p>
+      <ul>
+        <li><strong>Chord line</strong> &mdash; the straight line from the leading edge (front) to the trailing edge (back).</li>
+        <li><strong>Camber</strong> &mdash; how much the airfoil's centerline curves away from the chord line. A flat-bottomed airfoil has camber only on top; a symmetric airfoil has none.</li>
+        <li><strong>Thickness</strong> &mdash; the airfoil's maximum height as a percentage of chord (a "12% airfoil" is 12% as thick as it is long).</li>
+        <li><strong>Angle of attack (AoA)</strong> &mdash; the angle between the chord line and the oncoming air. This is the variable a pilot (or autopilot) actually controls in flight, by pitching the aircraft.</li>
+      </ul>
+
+      <h2>How lift is actually generated</h2>
+      <p>The short, correct version: <strong>a wing generates lift by deflecting air downward</strong>. By Newton's third law, if the wing pushes air down, the air pushes the wing up. The pressure difference between the wing's upper and lower surfaces &mdash; lower pressure on top, higher on the bottom &mdash; is the mechanism by which that downward deflection happens, and it's real and measurable, but it's a <em>description</em> of the same phenomenon, not a separate cause.</p>
+      <p>Worth knowing explicitly: the popular "equal transit time" explanation &mdash; that air splitting at the leading edge must recombine at the trailing edge at the same time, so it has to speed up over the curved top surface &mdash; is <strong>wrong</strong>, and NASA and pilot-training sources both call it out directly. Air moving over the top of a wing arrives at the trailing edge well before the corresponding air molecule under the wing. The real reason the flow over the top accelerates is tied to the airfoil's curvature and the pressure field it creates, which is genuinely more subtle than the popular explanation suggests &mdash; this is one of the most commonly mis-taught topics in aerodynamics, so it's worth reading the NASA source below rather than the first blog post you find.</p>
+
+      <h2>The lift equation</h2>
+      <p class="mono equation">L = &frac12; &rho; V&sup2; S C<sub>L</sub></p>
+      <ul>
+        <li><strong>L</strong> &mdash; lift force</li>
+        <li><strong>&rho; (rho)</strong> &mdash; air density (drops with altitude and temperature; at College Station elevation/typical flying temps this is close to sea-level standard, ~1.225 kg/m&sup3;, but it matters more once you're doing serious performance calculations)</li>
+        <li><strong>V</strong> &mdash; airspeed</li>
+        <li><strong>S</strong> &mdash; wing reference area</li>
+        <li><strong>C<sub>L</sub></strong> &mdash; the lift coefficient: a dimensionless number that bundles up everything about the airfoil's shape and its current angle of attack</li>
+      </ul>
+      <p>Two things fall directly out of this equation that matter for your build: lift scales with the <strong>square</strong> of airspeed (double your speed, get 4x the lift at the same angle of attack &mdash; which is exactly why a VTOL needs so much more rotor thrust at zero airspeed than wing lift once it's cruising), and lift scales linearly with wing area, which is one of your few free design levers when you're sizing the airframe in Phase 03.</p>
+      <p>C<sub>L</sub> itself rises roughly linearly with angle of attack up to a point &mdash; then the flow separates from the upper surface, C<sub>L</sub> drops sharply, and the wing <strong>stalls</strong>. This happens at a fairly consistent <em>angle</em>, not a fixed <em>speed</em> &mdash; a common misconception. A heavier aircraft or one pulling more g just stalls at a higher airspeed for the same critical angle of attack.</p>
+
+      <h2>Reynolds number: why small RC aircraft don't fly like airliners</h2>
+      <p>Reynolds number (Re = &rho;Vc/&mu;, where c is chord length and &mu; is air viscosity) describes the ratio of inertial to viscous forces in the flow. A full-size airliner wing operates around Re = 10&ndash;50 million. A small VTOL like the one you're building, flying a few chord-lengths at modest speed, operates around Re = 50,000&ndash;300,000 &mdash; two to three orders of magnitude lower.</p>
+      <p>This matters more than it sounds like it should. At low Reynolds numbers, the airflow is much more prone to separating from the surface before it reaches the trailing edge (laminar separation), which is why "textbook" thick, high-camber airfoils that work great on full-size aircraft often perform poorly at model scale, and why a lot of successful small-scale designs use thinner airfoils with modest camber instead. This is also why the UIUC Applied Aerodynamics Group built and maintains an airfoil database specifically wind-tunnel-tested at these low Reynolds numbers &mdash; it's the right place to pull real airfoil coordinates and polar data from, rather than guessing from a general-aviation airfoil chart.</p>
+
+      <h2>Why this matters specifically for your tilt-rotor tricopter</h2>
+      <p>Your wing has to do two very different jobs: sit nearly motionless in the propwash during hover (where its lift is mostly irrelevant and its main job is to not stall the tilt-motor flow across it) and generate efficient lift during cruise. That's part of why a flat-bottomed or slightly undercambered airfoil is a common, forgiving choice for small hybrid VTOLs &mdash; it's tolerant of a wide angle-of-attack range and doesn't demand a precisely-built, sharp leading edge the way a high-performance thin airfoil does.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-3/" target="_blank" rel="noopener">NASA Glenn &mdash; Lift</a> and <a href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/factors-that-affect-lift/" target="_blank" rel="noopener">Factors That Affect Lift</a> &mdash; the authoritative, correct explanation of lift generation.</li>
+        <li><a href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bga-site-map/" target="_blank" rel="noopener">NASA Glenn &mdash; Beginner's Guide to Aeronautics (full site)</a> &mdash; the whole reference site; worth bookmarking.</li>
+        <li><a href="https://pilotinstitute.com/what-is-an-airfoil/" target="_blank" rel="noopener">Pilot Institute &mdash; What Is an Airfoil? How Lift Is Generated</a> &mdash; a very readable companion explanation aimed at pilots, not engineers.</li>
+        <li><a href="https://m-selig.ae.illinois.edu/ads.html" target="_blank" rel="noopener">UIUC Airfoil Data Site</a> and its <a href="https://m-selig.ae.illinois.edu/ads/coord_database.html" target="_blank" rel="noopener">coordinate database</a> &mdash; real wind-tunnel-tested airfoil coordinates and polars, many at model-aircraft Reynolds numbers.</li>
+        <li><a href="https://xflr5.org/xflr5-is-a-free-aerodynamic-analysis/" target="_blank" rel="noopener">XFLR5</a> &mdash; free tool to run your own lift/drag analysis on candidate airfoils at your specific Reynolds number.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Site-wide additions on top of styles.css (unmodified design system).
+   Covers: global top nav, research page header, research hub cards,
+   inline equation blocks. Uses only existing design tokens.
+   ========================================================================== */
+
+/* ---------- global site nav ---------- */
+.sitenav{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:var(--surface);
+  border-bottom:1px solid var(--line-strong);
+}
+.sitenav-inner{
+  max-width:1160px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:12px 24px;
+}
+.sitenav-brand{
+  font-family:'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:0.02em;
+  font-size:1.05rem;
+  color:var(--ink);
+  text-decoration:none;
+}
+.sitenav-brand:hover{ color:var(--ink); }
+.sitenav-links{ display:flex; gap:4px; }
+.sitenav-links a{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:0.76rem;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:var(--ink-muted);
+  text-decoration:none;
+  padding:7px 14px;
+  border:1px solid transparent;
+  border-radius:var(--radius);
+}
+.sitenav-links a:hover{ color:var(--ink); background:var(--surface-2); }
+.sitenav-links a[aria-current="page"]{
+  color:var(--teal);
+  border-color:var(--teal);
+  background:var(--teal-soft);
+}
+@media (max-width:640px){
+  .sitenav-inner{ padding:10px 16px; }
+  .sitenav-brand{ font-size:0.92rem; }
+  .sitenav-links a{ padding:6px 10px; font-size:0.7rem; }
+}
+
+/* ---------- research page header ---------- */
+.page-header{
+  border-bottom:1px solid var(--line-strong);
+  padding-bottom:22px;
+  margin-bottom:36px;
+}
+.page-header .eyebrow{ display:block; margin-bottom:10px; }
+.page-header h1{ font-size:clamp(1.9rem, 4.5vw, 2.8rem); }
+.page-header .sub{ margin-top:10px; font-size:1rem; color:var(--ink-muted); max-width:66ch; }
+
+/* ---------- research hub ---------- */
+.research-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:20px;
+  margin-top:24px;
+}
+@media (max-width:700px){ .research-grid{ grid-template-columns:1fr; } }
+.research-card{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  border:1px solid var(--line);
+  background:var(--surface);
+  padding:20px 22px;
+  text-decoration:none;
+  transition:border-color .15s ease;
+}
+.research-card:hover{ border-color:var(--teal); }
+.research-card h3{ font-size:1.3rem; text-decoration:none; }
+.research-card p{ font-size:0.92rem; color:var(--ink-muted); margin:0; max-width:none; }
+.research-card .read-link{
+  margin-top:auto;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:0.76rem;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:var(--teal);
+}
+.research-card:hover .read-link{ color:var(--accent); }
+
+/* ---------- inline equation blocks ---------- */
+.equation{
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  padding:14px 18px;
+  margin:18px 0;
+  font-size:1.05rem;
+  text-align:center;
+  max-width:none;
+}
+
+/* ---------- research article body ---------- */
+.article{ max-width:74ch; }
+.article h2{ font-size:1.5rem; margin:40px 0 14px; }
+.article h2:first-child{ margin-top:0; }
+.article h3{ font-size:1.15rem; margin:22px 0 10px; text-transform:none; letter-spacing:0; }
+.article p{ max-width:74ch; }
+.article ul{ margin:0 0 1em; padding-left:1.2em; max-width:74ch; }
+.article li{ margin-bottom:6px; }
+.article .lede{ font-style:italic; color:var(--ink-muted); }

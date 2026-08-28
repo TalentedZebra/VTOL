@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structures &amp; Materials &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 05</span>
+      <h1>Structures &amp; Materials</h1>
+    </div>
+
+    <div class="article">
+      <h2>Wing loading: the single number that most shapes how an aircraft flies</h2>
+      <p>Wing loading is simply weight divided by wing area (W/S). It's the number most responsible for how forgiving an aircraft is to fly: low wing loading means the wing has plenty of area for the aircraft's weight, so it flies slowly, stalls gently, and tolerates a wide margin of angle-of-attack and speed. High wing loading means faster stall speed, faster cruise speed, and less margin for error &mdash; the traditional trade-off traded for efficiency and speed in larger, faster aircraft.</p>
+      <p>For a first hybrid VTOL, biasing toward lower wing loading than you might otherwise pick is a reasonable trade &mdash; it buys you a wider, more forgiving transition speed window (see the transition-aerodynamics content) at some cost in outright cruise efficiency, which is exactly the right trade to make while you're still learning to fly and tune the thing.</p>
+      <p>A related, more scale-aware metric used a lot in the RC community is <strong>wing cube loading</strong> (weight &divide; (wing area)^1.5), which corrects for the fact that a simple weight/area ratio doesn't scale fairly between very different-sized aircraft &mdash; worth knowing the name of if you go looking for comparison numbers against other builds.</p>
+
+      <h2>Spars, bending, and why the wing doesn't just snap</h2>
+      <p>In level flight, the wing's lift is distributed along its span, while the wing's weight &mdash; and everything hanging off structurally supported points &mdash; acts as concentrated loads. This creates a <strong>bending moment</strong>: the further out from the fuselage you go, the more the accumulated lift from everything outboard of that point is trying to bend the wing upward at the root. The wing's structural job is to resist that bending without excessive flex or failure, and in almost all wing designs &mdash; full-scale or model &mdash; that job is done primarily by a <strong>spar</strong>: a stiff beam running spanwise, usually positioned near the point of maximum airfoil thickness where it has the most structural depth to work with.</p>
+      <p>The intuitive version of why spar <em>material</em> placement matters: bending resistance comes overwhelmingly from material placed far from the neutral bending axis (the top and bottom "caps" of the spar), while the material connecting them (the "web") mostly just needs to resist shear, not bending, directly. This is why efficient spars &mdash; in balsa builders' box-spars, in composite I-beam spars, in aluminum wing spars alike &mdash; put strong material at the top and bottom and lighter material in between, rather than being a uniformly solid beam.</p>
+      <p>For a tilt-rotor tricopter specifically, remember that the wingtip-mounted tilt nacelles introduce their own significant point loads (motor thrust and the servo torque needed to tilt them) right where a normal fixed-wing design usually has none &mdash; that mounting point deserves deliberate reinforcement, not an afterthought, since it's simultaneously carrying aerodynamic bending load and a dynamic, vibrating thrust load.</p>
+
+      <h2>Material choices for a first build</h2>
+      <ul>
+        <li><strong>3D-printed PLA/PETG</strong> &mdash; the most common choice for a first scratch-built hybrid VTOL (it's what MiniHawk VTOL and many similar open designs use). Cheap, fast to iterate, and design freedom for organic shapes like tilt nacelles that would be hard to build from sheet materials. Trade-offs: heavier per unit strength than balsa or composite, and layer-line weakness means print orientation and infill pattern matter for anything load-bearing (a spar-equivalent internal structure, printed in the right orientation, matters more than raw infill percentage).</li>
+        <li><strong>Balsa/foam built-up structure</strong> &mdash; lighter for the same strength in experienced hands, the traditional RC construction method, but demands more building skill and doesn't lend itself as naturally to complex tilt-mechanism geometry.</li>
+        <li><strong>Carbon fiber reinforcement</strong> &mdash; even a thin CF strip or tube added along a 3D-printed or foam spar dramatically increases stiffness for very little added weight; a common and worthwhile upgrade once v1 has proven the geometry.</li>
+      </ul>
+
+      <h2>Weight and CG budgeting</h2>
+      <p>Keep a running spreadsheet of every component's mass and its position relative to a fixed reference point (e.g., the nose) from the moment you start Phase 03 sizing through the end of fabrication. Center of gravity (CG) position is not just a performance detail &mdash; an aircraft with CG too far aft can be dangerously unstable in pitch, and one too far forward may not have enough elevator/elevon authority to flare or maintain level flight at low speed. Re-verify actual CG by physically balancing the finished airframe before the first flight; a spreadsheet estimate and the real, built aircraft frequently disagree by more than people expect.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://aerotoolbox.com/wing-structural-design/" target="_blank" rel="noopener">AeroToolbox &mdash; Introduction to Wing Structural Design</a> &mdash; a clear, modern treatment of spar/rib structural roles.</li>
+        <li><a href="https://ciurpita.tripod.com/rc/rcsd/bendMom/bendMom.html" target="_blank" rel="noopener">Bending Moments in RC wings (ciurpita.tripod.com)</a> and <a href="https://ciurpita.tripod.com/rc/notes/wingStrength.html" target="_blank" rel="noopener">Strength of Wings</a> &mdash; long-standing, RC-specific structural references from the aeromodeling community.</li>
+        <li><a href="https://medium.com/@neelaydeshmukhtp1/understanding-wing-loading-how-it-affects-your-rc-model-aircraft-be3fc8ea8ec3" target="_blank" rel="noopener">Understanding Wing Loading and Its Effect on RC Model Aircraft</a> &mdash; an approachable, RC-focused explainer.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

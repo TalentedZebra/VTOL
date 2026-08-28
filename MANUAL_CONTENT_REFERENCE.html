@@ -1,0 +1,847 @@
+<title>Tricopter VTOL Manual</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#EDEFE6;
+    --surface:#FAFAF2;
+    --surface-2:#F2F3E9;
+    --line:#C9CDBC;
+    --line-strong:#A9AE99;
+    --ink:#1C2B29;
+    --ink-muted:#57645D;
+    --ink-faint:#818C82;
+    --accent:#BD4E19;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#F0DCC5;
+    --teal:#28675F;
+    --teal-soft:#DCE8E1;
+    --good:#3E7A4C;
+    --warn:#B4791A;
+    --shadow: 0 1px 0 rgba(28,43,41,0.06);
+    --radius: 3px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#111A1A;
+      --surface:#182322;
+      --surface-2:#1E2B29;
+      --line:#324441;
+      --line-strong:#465C57;
+      --ink:#E9ECE3;
+      --ink-muted:#9AA79E;
+      --ink-faint:#71807A;
+      --accent:#E38A47;
+      --accent-ink:#1B1206;
+      --accent-soft:#3A2A18;
+      --teal:#6FBBAE;
+      --teal-soft:#173430;
+      --good:#7BC28C;
+      --warn:#E0A94A;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#111A1A;
+    --surface:#182322;
+    --surface-2:#1E2B29;
+    --line:#324441;
+    --line-strong:#465C57;
+    --ink:#E9ECE3;
+    --ink-muted:#9AA79E;
+    --ink-faint:#71807A;
+    --accent:#E38A47;
+    --accent-ink:#1B1206;
+    --accent-soft:#3A2A18;
+    --teal:#6FBBAE;
+    --teal-soft:#173430;
+    --good:#7BC28C;
+    --warn:#E0A94A;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    font-weight:800;
+    line-height:0.95;
+    text-wrap:balance;
+    color:var(--ink);
+    margin:0;
+  }
+  code, .mono, .num, kbd{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  a{ color:var(--teal); text-decoration-thickness:1px; text-underline-offset:2px; }
+  a:hover{ color:var(--accent); }
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+  p{ margin:0 0 0.9em; max-width:66ch; color:var(--ink); }
+  .muted{ color:var(--ink-muted); }
+  ::selection{ background:var(--accent-soft); }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--teal);
+    font-weight:600;
+  }
+
+  /* ---------- shell layout ---------- */
+  .shell{
+    display:grid;
+    grid-template-columns: 236px minmax(0,1fr);
+    max-width:1160px;
+    margin:0 auto;
+    align-items:start;
+  }
+  @media (max-width:880px){
+    .shell{ grid-template-columns: 1fr; }
+  }
+
+  nav.rail{
+    position:sticky;
+    top:0;
+    max-height:100vh;
+    overflow-y:auto;
+    padding:28px 18px 28px 24px;
+    border-right:1px solid var(--line);
+  }
+  @media (max-width:880px){
+    nav.rail{
+      position:static;
+      max-height:none;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      padding:18px 20px;
+    }
+  }
+  .rail-title{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.1em;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .progress-wrap{ margin-bottom:20px; }
+  .progress-track{
+    height:6px; background:var(--surface-2); border:1px solid var(--line);
+    border-radius:99px; overflow:hidden; margin-top:6px;
+  }
+  .progress-fill{
+    height:100%; width:0%; background:var(--accent);
+    transition:width .35s ease;
+  }
+  .progress-pct{ font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--ink-muted); }
+
+  .rail ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; }
+  @media (max-width:880px){
+    .rail ol{ flex-direction:row; overflow-x:auto; gap:0; padding-bottom:4px; }
+  }
+  .rail a{
+    display:flex; gap:8px; align-items:baseline;
+    padding:7px 8px; border-radius:var(--radius);
+    color:var(--ink-muted); text-decoration:none; font-size:0.86rem;
+    white-space:nowrap;
+  }
+  .rail a:hover{ background:var(--surface-2); color:var(--ink); }
+  .rail a .n{ font-family:'IBM Plex Mono',monospace; color:var(--ink-faint); font-size:0.78rem; }
+  .rail a[data-done="true"] .n{ color:var(--good); }
+  .rail a[data-done="true"]::after{ content:"✓"; color:var(--good); margin-left:auto; font-size:0.75rem; }
+
+  main{ padding:32px 32px 90px; min-width:0; }
+  @media (max-width:880px){ main{ padding:24px 20px 70px; } }
+
+  /* ---------- title block ---------- */
+  .titleblock{
+    border:1px solid var(--line-strong);
+    background:var(--surface);
+    margin-bottom:34px;
+  }
+  .titleblock-head{
+    padding:26px 26px 20px;
+    border-bottom:1px solid var(--line);
+  }
+  .titleblock h1{ font-size:clamp(2.1rem, 4.2vw, 3.1rem); }
+  .titleblock .sub{
+    margin-top:8px; font-size:1rem; color:var(--ink-muted); max-width:60ch;
+  }
+  .titleblock-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.76rem;
+  }
+  @media (max-width:640px){ .titleblock-grid{ grid-template-columns:repeat(2,1fr); } }
+  .tb-cell{ padding:12px 16px; border-right:1px solid var(--line); border-top:1px solid var(--line); }
+  .tb-cell:last-child{ border-right:none; }
+  .tb-cell .k{ display:block; color:var(--ink-faint); letter-spacing:0.08em; text-transform:uppercase; font-size:0.66rem; margin-bottom:3px; }
+  .tb-cell .v{ color:var(--ink); }
+
+  .intro{ margin-bottom:38px; }
+  .intro p{ max-width:70ch; }
+
+  /* ---------- decision callout ---------- */
+  .callout{
+    border:1px solid var(--line-strong);
+    border-left:4px solid var(--accent);
+    background:var(--surface);
+    padding:22px 24px;
+    margin-bottom:44px;
+  }
+  .callout h3{ font-size:1.3rem; margin-bottom:12px; }
+  .compare{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;
+  }
+  @media (max-width:640px){ .compare{ grid-template-columns:1fr; } }
+  .compare-card{ border:1px solid var(--line); padding:14px 16px; background:var(--surface-2); }
+  .compare-card.pick{ border-color:var(--teal); }
+  .compare-card .tag{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:0.68rem;
+    letter-spacing:0.08em; text-transform:uppercase; padding:2px 7px;
+    border:1px solid var(--teal); color:var(--teal); margin-bottom:8px;
+  }
+  .compare-card.pick .tag{ background:var(--teal); color:var(--surface); }
+  .compare-card h4{ font-size:1.05rem; margin-bottom:6px; text-transform:none; letter-spacing:0; }
+  .compare-card p{ font-size:0.92rem; margin-bottom:0.6em; }
+
+  /* ---------- phase sections ---------- */
+  section.phase{
+    margin-bottom:26px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    scroll-margin-top:20px;
+  }
+  .phase-head{
+    display:flex; align-items:center; gap:16px;
+    padding:18px 22px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+  .phase-head .pnum{
+    font-family:'IBM Plex Mono',monospace; font-size:1.6rem; color:var(--ink-faint);
+    min-width:2.2ch;
+  }
+  .phase-head h2{ font-size:1.5rem; flex:1; }
+  .phase-head .meta{
+    display:flex; flex-direction:column; align-items:flex-end; gap:4px;
+    font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--ink-muted);
+  }
+  .phase-head .chev{
+    font-size:1rem; color:var(--ink-faint); transition:transform .2s ease;
+  }
+  details[open] .phase-head .chev{ transform:rotate(90deg); }
+  details > summary{ list-style:none; }
+  details > summary::-webkit-details-marker{ display:none; }
+
+  .phase-body{ padding:0 24px 26px; border-top:1px solid var(--line); }
+  .phase-goal{ padding-top:18px; }
+  .phase-goal p{ max-width:70ch; }
+  .tie-in{
+    display:inline-flex; gap:6px; align-items:baseline;
+    font-size:0.82rem; color:var(--teal); background:var(--teal-soft);
+    padding:4px 10px; margin:8px 0 6px; border-radius:var(--radius);
+  }
+  .tie-in .eyebrow{ color:var(--teal); }
+
+  ul.checklist{ list-style:none; margin:14px 0 6px; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .check-item{ display:flex; align-items:flex-start; gap:10px; }
+  .check-item input[type="checkbox"]{
+    appearance:none; -webkit-appearance:none;
+    width:18px; height:18px; margin-top:2px; flex:none;
+    border:1.5px solid var(--line-strong); border-radius:3px;
+    background:var(--surface); cursor:pointer; position:relative;
+  }
+  .check-item input[type="checkbox"]:checked{ background:var(--accent); border-color:var(--accent); }
+  .check-item input[type="checkbox"]:checked::after{
+    content:""; position:absolute; left:5px; top:1px; width:5px; height:9px;
+    border:solid var(--accent-ink); border-width:0 2px 2px 0; transform:rotate(45deg);
+  }
+  .check-item label{ cursor:pointer; }
+  .check-item.done label{ color:var(--ink-faint); text-decoration:line-through; text-decoration-color:var(--line-strong); }
+
+  .resources{ margin-top:18px; padding-top:14px; border-top:1px dashed var(--line); }
+  .resources .eyebrow{ display:block; margin-bottom:8px; }
+  .resources ul{ margin:0; padding-left:1.1em; }
+  .resources li{ margin-bottom:5px; font-size:0.92rem; }
+
+  /* ---------- tables ---------- */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); margin:16px 0 6px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.9rem; min-width:520px; }
+  th,td{ text-align:left; padding:9px 14px; border-bottom:1px solid var(--line); }
+  thead th{
+    font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--ink-muted); background:var(--surface-2);
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num, th.num{ font-family:'IBM Plex Mono',monospace; text-align:right; }
+  tfoot td{ font-weight:600; border-top:1.5px solid var(--line-strong); }
+
+  .pill{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:0.68rem;
+    letter-spacing:0.05em; text-transform:uppercase; padding:2px 8px; border-radius:99px;
+  }
+  .pill.core{ background:var(--accent-soft); color:var(--accent); }
+  .pill.optional{ background:var(--surface-2); color:var(--ink-muted); border:1px solid var(--line); }
+
+  /* ---------- appendix / footer ---------- */
+  .appendix h2{ font-size:1.6rem; margin-bottom:6px; }
+  .appendix{ margin-top:52px; }
+  .lib-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:20px; }
+  @media (max-width:700px){ .lib-grid{ grid-template-columns:1fr; } }
+  .lib-cat{ border:1px solid var(--line); padding:16px 18px; background:var(--surface); }
+  .lib-cat h4{ font-size:1rem; text-transform:none; letter-spacing:0; margin-bottom:10px; color:var(--teal); }
+  .lib-cat ul{ margin:0; padding-left:1.1em; }
+  .lib-cat li{ font-size:0.9rem; margin-bottom:6px; }
+
+  .safety{
+    margin-top:44px; border:1px solid var(--warn); background:var(--surface);
+    padding:20px 22px;
+  }
+  .safety h3{ font-size:1.15rem; color:var(--warn); margin-bottom:10px; }
+  .safety p{ max-width:70ch; font-size:0.94rem; }
+
+  footer{
+    margin-top:56px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:0.82rem; color:var(--ink-faint); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+
+<div class="shell">
+  <nav class="rail" aria-label="Phase index">
+    <div class="progress-wrap">
+      <div class="rail-title">Overall progress</div>
+      <span class="progress-pct"><span id="pct">0</span>% complete</span>
+      <div class="progress-track"><div class="progress-fill" id="pctFill"></div></div>
+    </div>
+    <div class="rail-title">Pipeline</div>
+    <ol id="railList">
+      <li><a href="#p0"><span class="n">00</span> Foundations</a></li>
+      <li><a href="#p1"><span class="n">01</span> Research &amp; requirements</a></li>
+      <li><a href="#p2"><span class="n">02</span> Configuration</a></li>
+      <li><a href="#p3"><span class="n">03</span> Analysis &amp; sizing</a></li>
+      <li><a href="#p4"><span class="n">04</span> Components &amp; BOM</a></li>
+      <li><a href="#p5"><span class="n">05</span> Fabrication</a></li>
+      <li><a href="#p6"><span class="n">06</span> Electronics &amp; firmware</a></li>
+      <li><a href="#p7"><span class="n">07</span> Ground test &amp; tune</a></li>
+      <li><a href="#p8"><span class="n">08</span> Flight test</a></li>
+      <li><a href="#p9"><span class="n">09</span> Iterate &amp; document</a></li>
+      <li><a href="#lib">&mdash; Resource library</a></li>
+      <li><a href="#budget">&mdash; Budget</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <div class="titleblock">
+      <div class="titleblock-head">
+        <h1>Tricopter VTOL</h1>
+        <div class="sub">A ground-up research-to-flight pipeline for a tilt-rotor tricopter VTOL &mdash; hover on three motors, cruise on a fixed wing. Built as a personal project that runs alongside the Multidisciplinary Engineering Technology / Mechatronics coursework it draws on.</div>
+      </div>
+      <div class="titleblock-grid">
+        <div class="tb-cell"><span class="k">Engineer</span><span class="v">Joaquin Kristof</span></div>
+        <div class="tb-cell"><span class="k">Program</span><span class="v">MXET &mdash; Mechatronics, Texas A&amp;M</span></div>
+        <div class="tb-cell"><span class="k">Status</span><span class="v">Phase 00 &middot; Rev A</span></div>
+        <div class="tb-cell"><span class="k">Opened</span><span class="v">Aug 2026</span></div>
+      </div>
+    </div>
+
+    <div class="intro">
+      <span class="eyebrow">Read this first</span>
+      <p style="margin-top:8px">This page is a working manual, not a one-time reading. Each phase below has a checklist &mdash; check items off as you go and your progress is saved in this browser (nothing is sent anywhere; it's stored locally, so it'll persist here on this device but won't follow you to another one). Phases are meant to overlap, not run strictly in order &mdash; you'll circle back to research while you're building, and that's normal for a first aircraft.</p>
+      <p>Budget assumed below is flexible ($800+) over a multi-semester timeline, and the plan assumes you're starting from limited hands-on RC/electronics experience, so Phase 00 front-loads the fundamentals you'll lean on for the rest of the build.</p>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">Decision 1 &middot; before anything else</span>
+      <h3>Tilt-rotor tricopter, not a tailsitter</h3>
+      <p>"VTOL tricopter" covers two genuinely different aircraft. A <strong>tailsitter</strong> is a fixed-wing plane that rests on its tail and pitches its whole airframe 90&deg; between hover and cruise &mdash; mechanically simple (no tilt servos) but hard to control through transition, and awkward for anything that needs to stay level, like a camera. A <strong>tilt-rotor tricopter</strong> keeps the fuselage level the whole time: two motors on the wingtips rotate from vertical (hover) to horizontal (cruise) while a third, fixed motor at the tail handles yaw and extra lift in hover. Recommendation: build the tilt-rotor tricopter first. It has real, documented precedent to build from and is the more forgiving path for a first VTOL.</p>
+      <div class="compare">
+        <div class="compare-card pick">
+          <span class="tag">Recommended</span>
+          <h4>Tilt-rotor tricopter</h4>
+          <p>2 wingtip motors tilt 0&ndash;90&deg; on servos; 1 fixed rear motor for hover yaw. Fixed wing + elevons for cruise control.</p>
+          <p class="muted">Precedent: <a href="https://github.com/StephenCarlson/MiniHawk-VTOL" target="_blank" rel="noopener">MiniHawk VTOL</a> (open-source, 3D-printed, this exact layout) and the commercial <a href="https://docs.px4.io/main/en/frames_vtol/vtol_tiltrotor_eflite_convergence_pixfalcon" target="_blank" rel="noopener">E-flite Convergence</a>, which PX4 already has a reference config for.</p>
+        </div>
+        <div class="compare-card">
+          <span class="tag">Later / stretch</span>
+          <h4>Tailsitter</h4>
+          <p>Whole airframe rotates. No tilt mechanism to build, but transition control and payload orientation are both harder to get right.</p>
+          <p class="muted">Worth building as a second, simpler aircraft once you've flown the tilt-rotor and want to compare control strategies &mdash; see <a href="https://ardupilot.org/plane/docs/guide-tailsitter.html" target="_blank" rel="noopener">ArduPilot's tailsitter guide</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 00 -->
+    <details id="p0" class="phase" open>
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">00</span>
+          <h2>Foundations</h2>
+          <div class="meta"><span>Semester 1</span><span>~4&ndash;6 wks</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Before designing anything, get fluent in the vocabulary and the physical building blocks: what a brushless motor/ESC/LiPo system actually does, how radio control links work, and what a flight controller is doing 400+ times a second. Skipping this is the single biggest cause of a first scratch-build never leaving the ground.</p>
+          <span class="tie-in"><span class="eyebrow">Coursework tie-in</span> circuits &amp; intro electronics courses cover the Ohm's-law-level stuff you'll use constantly when sizing wire gauge, fuses, and current draw.</span>
+        </div>
+        <ul class="checklist" data-phase="p0">
+          <li class="check-item"><input type="checkbox" id="p0-1"><label for="p0-1">Learn the electric propulsion chain end to end: LiPo battery &rarr; ESC &rarr; brushless motor &rarr; propeller, and what C-rating, kV, and pole count actually mean.</label></li>
+          <li class="check-item"><input type="checkbox" id="p0-2"><label for="p0-2">Build basic soldering competence (motor bullet connectors, XT60/XT30 connectors, servo extensions) on scrap wire before it matters on a real part.</label></li>
+          <li class="check-item"><input type="checkbox" id="p0-3"><label for="p0-3">Learn safe LiPo handling and storage (fire risk is real and specific to this chemistry &mdash; storage bags/cases, storage-voltage charging, never fully discharging).</label></li>
+          <li class="check-item"><input type="checkbox" id="p0-4"><label for="p0-4">Fly a cheap simulator or a $40 RTF micro RC plane first, so your hands know stick inputs before you're trusting them with something you built.</label></li>
+          <li class="check-item"><input type="checkbox" id="p0-5"><label for="p0-5">Watch Nicholas Rehm's dRehmFlight build videos start to finish &mdash; he documents building tilt-rotor and tailsitter VTOLs from bare parts, narrating every decision.</label></li>
+          <li class="check-item"><input type="checkbox" id="p0-6"><label for="p0-6">Find and join Texas A&amp;M's Design/Build/Fly team and/or a local RC club (see Phase 01) &mdash; in-person people who've broken props before you will save you months.</label></li>
+        </ul>
+        <div class="resources">
+          <span class="eyebrow">Key resources</span>
+          <ul>
+            <li><a href="https://www.drehmflight.com/drehmflight-vtol" target="_blank" rel="noopener">dRehmFlight VTOL</a> &mdash; project home, parts list, and video series aimed at exactly this kind of first build.</li>
+            <li><a href="https://hackaday.io/project/174768-drehmflight-vtol" target="_blank" rel="noopener">dRehmFlight on Hackaday.io</a> &mdash; build logs and community discussion.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 01 -->
+    <details id="p1" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">01</span>
+          <h2>Research &amp; requirements</h2>
+          <div class="meta"><span>Semester 1</span><span>~3&ndash;4 wks</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Turn "I want to build a VTOL tricopter" into a written requirements sheet: rough size class, target flight time, whether it ever needs to carry a payload (camera, sensor package), and where you'll legally and safely test it. Study the reference builds closely enough that you could explain, out loud, why each design choice was made.</p>
+        </div>
+        <ul class="checklist" data-phase="p1">
+          <li class="check-item"><input type="checkbox" id="p1-1"><label for="p1-1">Read the MiniHawk VTOL build docs end to end &mdash; it's the closest open-source match to what you're building (800mm tilt-rotor tricopter, 3D-printed).</label></li>
+          <li class="check-item"><input type="checkbox" id="p1-2"><label for="p1-2">Read ArduPilot's <a href="https://ardupilot.org/plane/docs/guide-tilt-rotor.html" target="_blank" rel="noopener">Tilt Rotor Planes</a> guide and skim the <a href="https://ardupilot.org/plane/docs/quadplane-building.html" target="_blank" rel="noopener">QuadPlane building guide</a> to see the parameter-level picture of how these are tuned.</label></li>
+          <li class="check-item"><input type="checkbox" id="p1-3"><label for="p1-3">Decide your flight-controller path now (see Decision 2 below) &mdash; it shapes every wiring and mounting choice from here on.</label></li>
+          <li class="check-item"><input type="checkbox" id="p1-4"><label for="p1-4">Write a one-page requirements sheet: wingspan target, all-up weight budget, hover time, cruise speed, payload (if any), and a hard "definition of done" for v1.</label></li>
+          <li class="check-item"><input type="checkbox" id="p1-5"><label for="p1-5">Take the FAA TRUST test (free, ~20 min, required for recreational flying) and register the aircraft with the FAA once it's built if it's over 250g &mdash; do this early, not the week you want to fly.</label></li>
+          <li class="check-item"><input type="checkbox" id="p1-6"><label for="p1-6">Identify your flight-test site: an AMA-affiliated club field gives you insurance coverage and open airspace clearance that a random field doesn't.</label></li>
+          <li class="check-item"><input type="checkbox" id="p1-7"><label for="p1-7">Contact the Texas A&amp;M Design/Build/Fly (AIAA DBF) team and check the Aerospace Engineering student-orgs list &mdash; even as a MXET student, cross-department teams are usually happy to have someone who wants to learn.</label></li>
+        </ul>
+        <div class="resources">
+          <span class="eyebrow">Key resources</span>
+          <ul>
+            <li><a href="https://github.com/StephenCarlson/MiniHawk-VTOL" target="_blank" rel="noopener">MiniHawk VTOL</a> &middot; <a href="https://hackaday.io/project/175286-minihawk-vtol" target="_blank" rel="noopener">build log on Hackaday.io</a></li>
+            <li><a href="https://ardupilot.org/plane/docs/guide-tilt-rotor.html" target="_blank" rel="noopener">ArduPilot &mdash; Tilt Rotor Planes</a></li>
+            <li><a href="https://pilotinstitute.com/recreational-drone-pilots-rules/" target="_blank" rel="noopener">FAA recreational drone rules overview</a> (TRUST, registration, Remote ID)</li>
+            <li><a href="https://www.tamudbf.org/" target="_blank" rel="noopener">Texas A&amp;M AIAA Design/Build/Fly team</a> &middot; <a href="https://engineering.tamu.edu/aerospace/academics/student-orgs.html" target="_blank" rel="noopener">Aerospace student orgs list</a></li>
+            <li><a href="https://flybvrc.com/" target="_blank" rel="noopener">Brazos Valley R/C</a> &mdash; the local AMA-affiliated club for College Station/Bryan; worth reaching out to before you need a field.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 02 -->
+    <details id="p2" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">02</span>
+          <h2>Configuration</h2>
+          <div class="meta"><span>Semester 1</span><span>~2&ndash;3 wks</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Lock the layout on paper before touching CAD. This is where "Decision 2" (flight controller) and the airframe's rough geometry get fixed, because changing them later means re-cutting parts you already built.</p>
+        </div>
+        <div class="callout" style="margin:16px 0 10px;">
+          <span class="eyebrow">Decision 2</span>
+          <h3 style="font-size:1.1rem;">dRehmFlight vs. ArduPilot QuadPlane</h3>
+          <p style="font-size:0.94rem;"><strong>dRehmFlight</strong> (runs on a $25 Teensy 4.0) is source code you read and edit directly &mdash; no GCS, no black-box autopilot logic. Best if the goal is to actually understand every line of the control loop, which fits a mechatronics track well. <strong>ArduPilot QuadPlane/tilt-rotor</strong> runs on a Pixhawk-class board, is far more capable (GPS waypoints, automatic transition, failsafes) but you're tuning parameters in an existing framework rather than writing the control code. Recommendation: start with dRehmFlight for v1 to learn the control theory hands-on, then consider migrating to ArduPilot for v2 once you want autonomy features.</p>
+        </div>
+        <ul class="checklist" data-phase="p2">
+          <li class="check-item"><input type="checkbox" id="p2-1"><label for="p2-1">Pick flight-controller hardware based on Decision 2 (Teensy 4.0 for dRehmFlight, or a Pixhawk/Matek F405-class board for ArduPilot).</label></li>
+          <li class="check-item"><input type="checkbox" id="p2-2"><label for="p2-2">Sketch the general arrangement: wingspan, tail type (twin-fin vs. single vertical stabilizer), fuselage/pod layout, and where the tilt servos live.</label></li>
+          <li class="check-item"><input type="checkbox" id="p2-3"><label for="p2-3">Decide fabrication method: FDM 3D printing (matches MiniHawk's approach, good for a mechatronics-heavy build with iteration) vs. foam-and-balsa (lighter, more traditional, less design freedom for the tilt nacelles).</label></li>
+          <li class="check-item"><input type="checkbox" id="p2-4"><label for="p2-4">Set up Fusion (free for students with a .edu email) and work through 2&ndash;3 short tutorials before starting the real model.</label></li>
+          <li class="check-item"><input type="checkbox" id="p2-5"><label for="p2-5">Draft a control-surface plan: elevons for pitch/roll in cruise, tilt-differential + rear-motor speed for yaw/pitch in hover.</label></li>
+        </ul>
+        <div class="resources">
+          <span class="eyebrow">Key resources</span>
+          <ul>
+            <li><a href="https://github.com/nickrehm/dRehmFlight" target="_blank" rel="noopener">dRehmFlight on GitHub</a></li>
+            <li><a href="https://github.com/ArduPilot/ardupilot_wiki/blob/master/plane/source/docs/quadplane-frame-setup.rst" target="_blank" rel="noopener">ArduPilot QuadPlane frame setup (source docs)</a></li>
+            <li><a href="https://www.autodesk.com/education/edu-software/fusion" target="_blank" rel="noopener">Fusion for students &amp; educators (free)</a></li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 03 -->
+    <details id="p3" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">03</span>
+          <h2>Analysis &amp; sizing</h2>
+          <div class="meta"><span>Semester 2</span><span>~3&ndash;5 wks</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Turn the sketch into numbers: an airfoil and wing that generate enough lift at your target cruise speed, a propulsion system sized to both hover and cruise thrust requirements (these are very different loading cases), and a weight-and-balance budget you'll hold yourself to during fabrication.</p>
+          <span class="tie-in"><span class="eyebrow">Coursework tie-in</span> statics, mechanics of materials, and any fluids/aero elective map directly onto wing loading, spar sizing, and drag estimation here.</span>
+        </div>
+        <ul class="checklist" data-phase="p3">
+          <li class="check-item"><input type="checkbox" id="p3-1"><label for="p3-1">Pick a beginner-friendly airfoil (e.g. a flat-bottomed or slightly undercambered section used on similar-size park flyers) and run it in XFLR5 to check lift/drag over your speed range.</label></li>
+          <li class="check-item"><input type="checkbox" id="p3-2"><label for="p3-2">Size the wing: pick a wing loading target (lower = more forgiving to fly, matters more on a first build than efficiency).</label></li>
+          <li class="check-item"><input type="checkbox" id="p3-3"><label for="p3-3">Use eCalc's motor/prop calculator to size the front tilt motors for <em>hover thrust</em> (need roughly 2&times; all-up weight in combined thrust across all 3 motors for margin) and check the same motors' efficiency at <em>cruise</em> throttle.</label></li>
+          <li class="check-item"><input type="checkbox" id="p3-4"><label for="p3-4">Size the battery: capacity vs. weight trade-off, and confirm continuous discharge (C-rating) covers your peak hover current draw.</label></li>
+          <li class="check-item"><input type="checkbox" id="p3-5"><label for="p3-5">Build a running weight-and-balance spreadsheet (every component's mass and CG position) &mdash; update it every time a part changes, all the way through fabrication.</label></li>
+          <li class="check-item"><input type="checkbox" id="p3-6"><label for="p3-6">Sanity-check structural loads on the tilt-nacelle mounts and wing spar by hand before trusting a 3D-printed part to take them.</label></li>
+        </ul>
+        <div class="resources">
+          <span class="eyebrow">Key resources</span>
+          <ul>
+            <li><a href="https://xflr5.org/xflr5-is-a-free-aerodynamic-analysis/" target="_blank" rel="noopener">XFLR5</a> &mdash; free airfoil/wing analysis &middot; <a href="https://prumbach.nd.edu/xflr5/AME40451_XFLR5_Tutorial_1.pdf" target="_blank" rel="noopener">intro tutorial (PDF)</a></li>
+            <li><a href="https://www.ecalc.ch/xcoptercalc.php" target="_blank" rel="noopener">eCalc xcopterCalc</a> &mdash; multirotor/hover propulsion sizing &middot; <a href="https://www.ecalc.ch/motorcalc.php" target="_blank" rel="noopener">propCalc</a> for fixed-wing cruise sizing</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 04 -->
+    <details id="p4" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">04</span>
+          <h2>Components &amp; BOM</h2>
+          <div class="meta"><span>Semester 2</span><span>~2 wks + shipping</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Convert Phase 03's sizing numbers into an actual parts order. Buy once, buy correctly &mdash; a mis-sized motor or the wrong ESC firmware costs a re-order and a week of shipping later.</p>
+        </div>
+        <ul class="checklist" data-phase="p4">
+          <li class="check-item"><input type="checkbox" id="p4-1"><label for="p4-1">Order 2 identical tilt (front) motors + 1 rear motor, sized from Phase 03.</label></li>
+          <li class="check-item"><input type="checkbox" id="p4-2"><label for="p4-2">Order 3 ESCs rated well above your calculated peak current (headroom prevents thermal failure in hover, the highest-current flight mode).</label></li>
+          <li class="check-item"><input type="checkbox" id="p4-3"><label for="p4-3">Order 4 servos: 2 for motor tilt (need enough torque/speed to move a live motor nacelle), 2 for elevons.</label></li>
+          <li class="check-item"><input type="checkbox" id="p4-4"><label for="p4-4">Order flight controller + a receiver matched to your transmitter protocol, plus the transmitter/receiver pair itself if you don't already own one.</label></li>
+          <li class="check-item"><input type="checkbox" id="p4-5"><label for="p4-5">Order 2&ndash;3 LiPo packs (fly one, charge one) plus a proper LiPo-safe charger and fireproof storage bag.</label></li>
+          <li class="check-item"><input type="checkbox" id="p4-6"><label for="p4-6">Order propellers &mdash; get a couple of pitch/diameter options near your calculated target, since real performance rarely matches the calculator exactly.</label></li>
+          <li class="check-item"><input type="checkbox" id="p4-7"><label for="p4-7">Order fabrication consumables: filament (if 3D printing), CA glue/epoxy, control horns, pushrods, ball links.</label></li>
+        </ul>
+        <div class="resources">
+          <span class="eyebrow">Where people buy this stuff</span>
+          <ul>
+            <li><a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> and <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a> &mdash; motors, ESCs, FCs, batteries; both stock fixed-wing/VTOL-specific parts, not just racing-drone gear.</li>
+            <li>Local hobby shops for servos/glue/pushrods when you don't want to wait on shipping.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 05 -->
+    <details id="p5" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">05</span>
+          <h2>Fabrication</h2>
+          <div class="meta"><span>Semester 2</span><span>~4&ndash;8 wks</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Build the airframe. Whatever method you chose in Phase 02, build in this order: structural skeleton first, then the tilt mechanism (it's the part most likely to need a second attempt), then skinning/finishing last.</p>
+          <span class="tie-in"><span class="eyebrow">Coursework tie-in</span> manufacturing processes and CAD/CAM courses feed straight into slicer settings, tolerancing for press-fits, and design-for-assembly decisions here.</span>
+        </div>
+        <ul class="checklist" data-phase="p5">
+          <li class="check-item"><input type="checkbox" id="p5-1"><label for="p5-1">Print/cut and test-fit the fuselage/wing structure dry (no glue) before committing.</label></li>
+          <li class="check-item"><input type="checkbox" id="p5-2"><label for="p5-2">Build and bench-test the tilt mechanism on its own, off the airframe &mdash; confirm the servo can sweep the motor+prop assembly through its full range under load before it's load-bearing on the plane.</label></li>
+          <li class="check-item"><input type="checkbox" id="p5-3"><label for="p5-3">Mount motors, check propeller clearance through the full tilt range (a prop strike against the wing during a tilt sweep is a very avoidable failure).</label></li>
+          <li class="check-item"><input type="checkbox" id="p5-4"><label for="p5-4">Route wiring with strain relief at every connector, and keep power leads away from anything you'll need to access later.</label></li>
+          <li class="check-item"><input type="checkbox" id="p5-5"><label for="p5-5">Install control-surface linkages, check for slop (free play reads as twitchy control response later) and full, unbinding range of motion.</label></li>
+          <li class="check-item"><input type="checkbox" id="p5-6"><label for="p5-6">Re-weigh and re-check CG against your Phase 03 spreadsheet before it's considered "built."</label></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- PHASE 06 -->
+    <details id="p6" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">06</span>
+          <h2>Electronics &amp; firmware</h2>
+          <div class="meta"><span>Semester 3</span><span>~2&ndash;3 wks</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Wire it, flash it, and prove every actuator moves the right way before the aircraft is ever off the bench. This phase ends with a full pre-flight bench test, not a flight.</p>
+          <span class="tie-in"><span class="eyebrow">Coursework tie-in</span> this is the mechatronics core: embedded systems/microcontrollers for the firmware side, sensors &amp; instrumentation for IMU/airspeed integration, controls for the PID loop you're about to tune in Phase 07.</span>
+        </div>
+        <ul class="checklist" data-phase="p6">
+          <li class="check-item"><input type="checkbox" id="p6-1"><label for="p6-1">Wire power distribution (battery &rarr; ESCs) and signal wiring (FC &rarr; ESCs/servos/receiver) per your chosen platform's pinout.</label></li>
+          <li class="check-item"><input type="checkbox" id="p6-2"><label for="p6-2">Flash firmware: dRehmFlight source configured for a 3-motor tilt-rotor mix, or ArduPilot with the tilt-rotor QuadPlane parameters.</label></li>
+          <li class="check-item"><input type="checkbox" id="p6-3"><label for="p6-3">Calibrate the transmitter/receiver, set up flight-mode switches, and configure a hard failsafe (motors cut / RTL) before anything spins.</label></li>
+          <li class="check-item"><input type="checkbox" id="p6-4"><label for="p6-4">Bench-test with propellers OFF first: confirm every motor spins the correct direction and every servo moves the correct direction for stick/mix inputs.</label></li>
+          <li class="check-item"><input type="checkbox" id="p6-5"><label for="p6-5">Only after all directions are verified, install propellers and do a secured (zip-tied/clamped down) throttle-up test.</label></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- PHASE 07 -->
+    <details id="p7" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">07</span>
+          <h2>Ground test &amp; tune</h2>
+          <div class="meta"><span>Semester 3</span><span>~2&ndash;3 wks</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Everything in this phase happens with the aircraft tied down or held. The goal is a hover-mode PID that's stable enough to trust in free air, and a pre-flight checklist you'll actually follow every single time.</p>
+        </div>
+        <ul class="checklist" data-phase="p7">
+          <li class="check-item"><input type="checkbox" id="p7-1"><label for="p7-1">Run a static thrust test per motor and log actual current draw against your Phase 03 predictions.</label></li>
+          <li class="check-item"><input type="checkbox" id="p7-2"><label for="p7-2">Tether the airframe (rope/bungee to a fixed point with slack) and do the first hover-mode throttle-up &mdash; expect to retune, not to nail it first try.</label></li>
+          <li class="check-item"><input type="checkbox" id="p7-3"><label for="p7-3">Tune hover-mode PID gains incrementally (small changes, one axis at a time) until it holds attitude without oscillating.</label></li>
+          <li class="check-item"><input type="checkbox" id="p7-4"><label for="p7-4">Verify tilt-servo response and rear-motor mixing produce clean yaw authority in hover.</label></li>
+          <li class="check-item"><input type="checkbox" id="p7-5"><label for="p7-5">Write a pre-flight checklist (battery voltage, control surface direction check, CG check, area clear) and print or save it somewhere you'll actually read it at the field.</label></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- PHASE 08 -->
+    <details id="p8" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">08</span>
+          <h2>Flight test</h2>
+          <div class="meta"><span>Semester 3&ndash;4</span><span>ongoing</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>Test incrementally &mdash; every step here should be boring if the previous step went well. The transition between hover and cruise is where most first-attempt VTOLs get damaged, so it gets the most caution.</p>
+        </div>
+        <ul class="checklist" data-phase="p8">
+          <li class="check-item"><input type="checkbox" id="p8-1"><label for="p8-1">Free hover, low altitude (a few feet), over soft ground (tall grass, not pavement) &mdash; land immediately if anything feels wrong.</label></li>
+          <li class="check-item"><input type="checkbox" id="p8-2"><label for="p8-2">Hover at a comfortable altitude, practice position holds and gentle translations in all directions.</label></li>
+          <li class="check-item"><input type="checkbox" id="p8-3"><label for="p8-3">First transition attempt: gain some altitude first (transitions eat altitude), initiate the tilt/pitch schedule slowly, and be ready to abort back to hover.</label></li>
+          <li class="check-item"><input type="checkbox" id="p8-4"><label for="p8-4">Full transition to cruise flight, fly a few laps, then practice the reverse transition back to hover.</label></li>
+          <li class="check-item"><input type="checkbox" id="p8-5"><label for="p8-5">Log every flight: what changed, what broke, what surprised you. This log is what turns into your v2 design decisions.</label></li>
+          <li class="check-item"><input type="checkbox" id="p8-6"><label for="p8-6">Once transition is reliable, test endurance and (if applicable) payload flights.</label></li>
+        </ul>
+        <div class="resources">
+          <span class="eyebrow">Key resource</span>
+          <ul>
+            <li><a href="https://ardupilot.org/plane/docs/tailsitter-tuning-guide.html" target="_blank" rel="noopener">ArduPilot VTOL tuning guide</a> &mdash; written for tailsitters but the transition-tuning philosophy (altitude margin, abort criteria, incremental testing) applies directly.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 09 -->
+    <details id="p9" class="phase">
+      <summary>
+        <div class="phase-head">
+          <span class="pnum">09</span>
+          <h2>Iterate &amp; document</h2>
+          <div class="meta"><span>Ongoing</span><span>&mdash;</span></div>
+          <span class="chev">&#9656;</span>
+        </div>
+      </summary>
+      <div class="phase-body">
+        <div class="phase-goal">
+          <p>A first VTOL is a prototype, not a final product. This phase is where the project turns from "I built a thing" into a portfolio piece and, if you want, a competition entry.</p>
+        </div>
+        <ul class="checklist" data-phase="p9">
+          <li class="check-item"><input type="checkbox" id="p9-1"><label for="p9-1">Write up the build: design decisions, what failed and why, flight data &mdash; this is the difference between "I built a drone" and a portfolio piece an employer or grad program actually reads.</label></li>
+          <li class="check-item"><input type="checkbox" id="p9-2"><label for="p9-2">Identify the biggest weakness from flight testing (usually: transition stability, hover efficiency, or structural weight) and scope a v2 change targeting just that.</label></li>
+          <li class="check-item"><input type="checkbox" id="p9-3"><label for="p9-3">Consider whether a version of this fits an AIAA competition, a capstone-adjacent independent study credit, or a conference/poster submission.</label></li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="safety">
+      <h3>&#9888; Safety notes worth re-reading before every flight season</h3>
+      <p>LiPo batteries can and do catch fire when damaged, over-discharged, or charged incorrectly &mdash; always charge in a fireproof bag/container, away from anything flammable. Never stand in the arc of a spinning propeller, including during bench testing. AMA membership is worth getting before your first flight test: it's inexpensive, typically includes liability insurance coverage while flying at AMA-sanctioned sites, and gets you access to an actual runway/field instead of a random park. Fly line-of-sight, under 400 ft, and clear of people, per FAA recreational rules &mdash; the tilt-rotor transition especially should always be tested with plenty of altitude and open space around you.</p>
+    </div>
+
+    <!-- BUDGET -->
+    <section id="budget" style="margin-top:52px;">
+      <span class="eyebrow">Reference</span>
+      <h2 style="font-size:1.6rem; margin-top:6px;">Rough budget, small tilt-rotor tricopter (~700&ndash;900mm class)</h2>
+      <p class="muted" style="margin-top:10px;">Ballpark ranges, not quotes &mdash; actual prices vary by brand and availability. Enough to plan against, not to order from blindly.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Items</th><th class="num">Typical range</th><th>Note</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Flight controller</td><td>1</td><td class="num">$25&ndash;150</td><td>Teensy 4.0 (dRehmFlight) at the low end; Pixhawk-class board for ArduPilot at the high end</td></tr>
+            <tr><td>Motors</td><td>3</td><td class="num">$45&ndash;90</td><td>2 matched tilt motors + 1 rear, sized in Phase 03</td></tr>
+            <tr><td>ESCs</td><td>3</td><td class="num">$45&ndash;75</td><td>Rated above your peak calculated current</td></tr>
+            <tr><td>Servos</td><td>4</td><td class="num">$30&ndash;70</td><td>2 tilt (higher torque) + 2 elevon</td></tr>
+            <tr><td>Radio system</td><td>TX + RX</td><td class="num">$100&ndash;250</td><td>One-time cost if you don't already own a transmitter</td></tr>
+            <tr><td>Batteries + charger</td><td>2&ndash;3 packs + charger</td><td class="num">$100&ndash;180</td><td>Include a fireproof LiPo storage bag</td></tr>
+            <tr><td>Propellers</td><td>2&ndash;3 sets</td><td class="num">$20&ndash;40</td><td>Buy options near your calculated pitch/diameter</td></tr>
+            <tr><td>Airframe materials</td><td>filament / foam / balsa + hardware</td><td class="num">$40&ndash;100</td><td>Depends heavily on fabrication method chosen in Phase 02</td></tr>
+            <tr><td>Misc / consumables</td><td>glue, connectors, wire, tools</td><td class="num">$40&ndash;80</td><td>Always more than you think</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="2">Estimated total</td><td class="num">$445&ndash;1035</td><td>Fits your $800+ flexible budget with room for a v2 iteration</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- RESOURCE LIBRARY -->
+    <section id="lib" class="appendix">
+      <span class="eyebrow">Field manual</span>
+      <h2>Resource library</h2>
+      <p class="muted" style="margin-top:6px;">Everything linked above, grouped for quick lookup later.</p>
+      <div class="lib-grid">
+        <div class="lib-cat">
+          <h4>Flight controller &amp; firmware</h4>
+          <ul>
+            <li><a href="https://www.drehmflight.com/drehmflight-vtol" target="_blank" rel="noopener">dRehmFlight VTOL</a></li>
+            <li><a href="https://github.com/nickrehm/dRehmFlight" target="_blank" rel="noopener">dRehmFlight (GitHub)</a></li>
+            <li><a href="https://ardupilot.org/plane/docs/guide-tilt-rotor.html" target="_blank" rel="noopener">ArduPilot &ndash; Tilt Rotor Planes</a></li>
+            <li><a href="https://ardupilot.org/plane/docs/guide-tailsitter.html" target="_blank" rel="noopener">ArduPilot &ndash; Tailsitter Planes</a></li>
+            <li><a href="https://ardupilot.org/plane/docs/quadplane-building.html" target="_blank" rel="noopener">ArduPilot &ndash; Building a QuadPlane</a></li>
+            <li><a href="https://ardupilot.org/plane/docs/tailsitter-tuning-guide.html" target="_blank" rel="noopener">ArduPilot &ndash; VTOL tuning guide</a></li>
+          </ul>
+        </div>
+        <div class="lib-cat">
+          <h4>Reference airframes</h4>
+          <ul>
+            <li><a href="https://github.com/StephenCarlson/MiniHawk-VTOL" target="_blank" rel="noopener">MiniHawk VTOL</a> (open-source tilt-rotor tricopter)</li>
+            <li><a href="https://hackaday.io/project/175286-minihawk-vtol" target="_blank" rel="noopener">MiniHawk build log</a></li>
+            <li><a href="https://docs.px4.io/main/en/frames_vtol/vtol_tiltrotor_eflite_convergence_pixfalcon" target="_blank" rel="noopener">E-flite Convergence (PX4 reference)</a></li>
+            <li><a href="https://discuss.px4.io/t/tricopter-vtol-plane/32556" target="_blank" rel="noopener">Tricopter VTOL plane build thread</a> (PX4/Dronecode forum)</li>
+          </ul>
+        </div>
+        <div class="lib-cat">
+          <h4>Design &amp; analysis tools</h4>
+          <ul>
+            <li><a href="https://www.autodesk.com/education/edu-software/fusion" target="_blank" rel="noopener">Fusion for students (free)</a></li>
+            <li><a href="https://xflr5.org/xflr5-is-a-free-aerodynamic-analysis/" target="_blank" rel="noopener">XFLR5</a> &mdash; airfoil/wing aero analysis</li>
+            <li><a href="https://www.ecalc.ch/xcoptercalc.php" target="_blank" rel="noopener">eCalc xcopterCalc</a> &mdash; hover propulsion sizing</li>
+            <li><a href="https://www.ecalc.ch/motorcalc.php" target="_blank" rel="noopener">eCalc propCalc</a> &mdash; fixed-wing cruise sizing</li>
+          </ul>
+        </div>
+        <div class="lib-cat">
+          <h4>Parts &amp; sourcing</h4>
+          <ul>
+            <li><a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a></li>
+            <li><a href="https://www.racedayquads.com/collections/all-fixed-wing-products" target="_blank" rel="noopener">RaceDayQuads &ndash; fixed-wing parts</a></li>
+          </ul>
+        </div>
+        <div class="lib-cat">
+          <h4>Regulatory &amp; safety</h4>
+          <ul>
+            <li><a href="https://pilotinstitute.com/recreational-drone-pilots-rules/" target="_blank" rel="noopener">FAA recreational drone rules overview</a></li>
+            <li><a href="https://www.modelaircraft.org/membershipfaqs" target="_blank" rel="noopener">AMA membership FAQ</a></li>
+            <li><a href="https://amablog.modelaircraft.org/blog/ama-insurance-plans/" target="_blank" rel="noopener">AMA insurance plans</a></li>
+          </ul>
+        </div>
+        <div class="lib-cat">
+          <h4>Texas A&amp;M-specific</h4>
+          <ul>
+            <li><a href="https://www.tamudbf.org/" target="_blank" rel="noopener">AIAA Design/Build/Fly team (TAMU)</a></li>
+            <li><a href="https://engineering.tamu.edu/aerospace/academics/student-orgs.html" target="_blank" rel="noopener">Aerospace student organizations</a></li>
+            <li><a href="https://engineering.tamu.edu/academics/fedc/index.html" target="_blank" rel="noopener">Fischer Engineering Design Center</a> &mdash; check current tools/access for a makerspace fit</li>
+            <li><a href="https://flybvrc.com/" target="_blank" rel="noopener">Brazos Valley R/C</a> &mdash; local flying field/club</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; personal project reference</span>
+      <span>Progress saved locally in this browser</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var STORE_KEY = 'vtol-pipeline-progress-v1';
+  var state = {};
+  try {
+    state = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+  } catch(e) { state = {}; }
+
+  var checkboxes = Array.prototype.slice.call(document.querySelectorAll('.checklist input[type="checkbox"]'));
+
+  function save(){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e) {}
+  }
+
+  function updatePhaseIndicator(phaseId){
+    var list = document.querySelectorAll('.checklist[data-phase="' + phaseId + '"] input[type="checkbox"]');
+    if (!list.length) return;
+    var done = 0;
+    list.forEach(function(cb){ if (cb.checked) done++; });
+    var link = document.querySelector('.rail a[href="#' + phaseId + '"]');
+    if (link) link.setAttribute('data-done', done === list.length ? 'true' : 'false');
+  }
+
+  function updateOverall(){
+    if (!checkboxes.length) return;
+    var done = checkboxes.filter(function(cb){ return cb.checked; }).length;
+    var pct = Math.round((done / checkboxes.length) * 100);
+    var pctEl = document.getElementById('pct');
+    var fillEl = document.getElementById('pctFill');
+    if (pctEl) pctEl.textContent = pct;
+    if (fillEl) fillEl.style.width = pct + '%';
+  }
+
+  checkboxes.forEach(function(cb){
+    if (state[cb.id]) { cb.checked = true; }
+    cb.closest('.check-item').classList.toggle('done', cb.checked);
+    cb.addEventListener('change', function(){
+      state[cb.id] = cb.checked;
+      save();
+      cb.closest('.check-item').classList.toggle('done', cb.checked);
+      var phase = cb.closest('.checklist').getAttribute('data-phase');
+      updatePhaseIndicator(phase);
+      updateOverall();
+    });
+  });
+
+  document.querySelectorAll('.checklist').forEach(function(list){
+    updatePhaseIndicator(list.getAttribute('data-phase'));
+  });
+  updateOverall();
+})();
+</script>
