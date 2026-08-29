@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airframe &amp; Body Design &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+      <a href="../landscape/index.html">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 08</span>
+      <h1>Airframe &amp; Body Design</h1>
+    </div>
+
+    <div class="article">
+      <p class="lede">This page covers the layout choices that sit above spar/material selection: fuselage and pod shape, tail configuration, nacelle/tilt-mechanism design, and wing planform. See <a href="structures-and-materials.html">Structures &amp; Materials</a> for how a wing actually resists bending once its shape is chosen.</p>
+
+      <h2>Fuselage &amp; body shape</h2>
+      <p>Three broad approaches show up repeatedly in tilt-rotor tricopter designs:</p>
+      <ul>
+        <li><strong>Pod-and-boom</strong> &mdash; a compact forward pod (battery, flight controller, payload) with a single tail boom running back to the tail surfaces and rear motor. Simple to build, easy to access internals, but a single boom is a single point of structural failure and has to carry both bending and the rear motor's thrust reaction.</li>
+        <li><strong>Full fuselage</strong> &mdash; a traditional enclosed body from nose to tail. More internal volume and a stiffer overall structure than a pod-and-boom, at the cost of more surface area (drag) and build complexity.</li>
+        <li><strong>Flying-wing / lifting-body</strong> &mdash; little or no distinct fuselage; the wing itself carries the electronics and payload internally. Both MiniHawk VTOL's "plank"-style wing and the Hackaday foam-board tilt-rotor tricopter (see <a href="../landscape/index.html">Landscape</a>) use this approach &mdash; it minimizes parts count and wetted area, at the cost of internal volume and often a less forgiving CG margin.</li>
+      </ul>
+      <p>A related structural note specific to twin-boom layouts (two parallel booms instead of one, with the tail surface(s) spanning between them): they give a pusher or rear motor a shorter, cleaner path to clean air and can improve rearward visibility/access, but the booms themselves are typically shallower and less stiff than an equivalent single fuselage, and the configuration adds drag relative to a conventional single-body layout.</p>
+
+      <h2>Tail configuration options</h2>
+      <p>This project's own reference build uses a V-tail (see <a href="reference-design-stallion.html">Reference Design: Flightory Stallion VTOL</a> for that specific tradeoff discussion) &mdash; but it's one of several real options:</p>
+      <ul>
+        <li><strong>Conventional tail</strong> (separate horizontal + vertical stabilizer) &mdash; the simplest configuration that handles trim, stability, and control all at once; used on the large majority of full-scale aircraft for good reason. Straightforward to build and analyze, at the cost of one more part count than a V-tail.</li>
+        <li><strong>T-tail</strong> &mdash; horizontal stabilizer mounted atop the vertical fin, keeping it clear of any wake ahead of it. Adds weight higher up (raising CG) and can be more susceptible to deep stalls.</li>
+        <li><strong>Cruciform tail</strong> &mdash; horizontal surfaces mounted partway up the fin rather than at the very top or very bottom; keeps most of the T-tail's wake-clearance benefit with less of its weight/stall penalty.</li>
+        <li><strong>V-tail (and X-tail)</strong> &mdash; two angled surfaces combine pitch and yaw control through ruddervators, for fewer parts and typically less interference drag, at the cost of adverse roll-yaw coupling and no continuous structural carry-through between the two panels (each is its own cantilever).</li>
+        <li><strong>Twin-tail / H-tail</strong> &mdash; two vertical fins flanking a shared horizontal stabilizer; common where a pusher prop or fuselage-mounted sensor needs the tail moved off the centerline.</li>
+      </ul>
+
+      <h2>Nacelle &amp; tilt-mechanism design</h2>
+      <p>The wingtip tilt nacelle is where this airframe type's design gets genuinely different from a standard fixed-wing. A few points that generalize across designs of this configuration:</p>
+      <ul>
+        <li>The tilt pivot has to carry the aerodynamic bending load coming in from the wing <em>and</em> the full motor-mount moment through what is, mechanically, a rotating joint &mdash; general tilt-rotor literature (see the Reference Design page's <a href="reference-design-stallion.html">wingtip-spar discussion</a>) consistently flags this joint, not the spar material itself, as the practical concentration point for stress and fastener loading.</li>
+        <li>Tilt actuation is almost always a direct servo arm at the pivot axis in hobby-scale builds (simpler, fewer parts) rather than a geared or belt-driven mechanism (more mechanical advantage, more complexity) &mdash; geared/belt actuation shows up more often at larger, higher-torque scales.</li>
+        <li>The tilt servo has to move a live, spinning motor mass against both aerodynamic loading and gyroscopic precession from the spinning prop, not just a static control surface &mdash; sizing servo torque/speed from a control-surface rule of thumb will undersize it. This is exactly why Phase 04 of the build manual calls out picking tilt servos with enough torque/speed margin specifically, rather than treating them like the elevon servos.</li>
+      </ul>
+
+      <h2>Wing planform alternatives</h2>
+      <p>This project's own build manual assumes a simple rectangular (constant-chord) wing for v1, which is a deliberate, forgiving choice, not the only option:</p>
+      <ul>
+        <li><strong>Rectangular / constant-chord</strong> &mdash; simplest and cheapest to build; stalls root-first, so the ailerons/elevons stay effective and the aircraft tends to drop straight ahead rather than snap into a spin. The standard choice for trainers and first scratch-builds for exactly that reason.</li>
+        <li><strong>Tapered</strong> &mdash; structurally and aerodynamically more efficient than a constant-chord wing (better lift distribution for the same wing area and weight), but prone to tip-stalling before the root unless the designer builds in <strong>washout</strong> (a slight nose-down twist toward the tip) to force root-first stall behavior back in.</li>
+        <li><strong>Swept</strong> &mdash; lower drag at higher speeds, but handles poorly near stall and needs more stiffness to resist aeroelastic flutter; rarely worth the complexity at hobby tilt-rotor speeds.</li>
+        <li><strong>Elliptical</strong> &mdash; the planform shape that most closely produces the theoretically ideal (elliptical) lift distribution on its own, but is genuinely difficult to manufacture, which is why tapered wings (which can approximate the same lift distribution without the manufacturing difficulty) are far more common in practice.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Tail_configuration" target="_blank" rel="noopener">Tail configuration &mdash; Wikipedia</a> &mdash; overview of conventional, T-tail, cruciform, V-tail, and twin-tail/twin-boom designs.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Twin-boom_aircraft" target="_blank" rel="noopener">Twin-boom aircraft &mdash; Wikipedia</a> &mdash; advantages (pusher-prop clearance, rear access) and drawbacks (drag, boom stiffness) of the twin-boom layout.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Wing_configuration" target="_blank" rel="noopener">Wing configuration &mdash; Wikipedia</a> &mdash; rectangular, tapered, elliptical, swept, and delta planform tradeoffs.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Washout_(aeronautics)" target="_blank" rel="noopener">Washout (aeronautics) &mdash; Wikipedia</a> &mdash; why tapered wings need built-in twist to stall root-first.</li>
+        <li><a href="https://www.flitetest.com/articles/what-are-tip-stalls-how-do-they-form" target="_blank" rel="noopener">What Are Tip Stalls? How Do They Form? &mdash; Flite Test</a> &mdash; RC-specific, practical explanation of tip-stall risk and washout.</li>
+        <li><a href="https://www.grc.nasa.gov/www/k-12/VirtualAero/BottleRocket/airplane/geom.html" target="_blank" rel="noopener">Wing Geometry Definitions &mdash; NASA Glenn Research Center</a> &mdash; planform and aspect-ratio fundamentals.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+        <li><a href="reference-design-stallion.html">Reference Design: Flightory Stallion VTOL</a></li>
+        <li><a href="component-selection-guide.html">Component Selection Guide</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

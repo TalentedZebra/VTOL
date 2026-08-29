@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-flite Convergence &mdash; Landscape &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="../research/index.html">Research &amp; Principles</a>
+      <a href="index.html" aria-current="page">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Landscape &middot; Commercial / prosumer &middot; 04</span>
+      <h1>E-flite Convergence</h1>
+      <p class="sub">A ready-to-fly, commercially manufactured tilt-rotor tricopter &mdash; and notable for being the design PX4 itself ships an official reference configuration for.</p>
+    </div>
+
+    <div class="article">
+      <h2>Configuration</h2>
+      <p>Three motors total: left and right wingtip motors sit on nacelles actuated by two tilt servos, while the back (tail) motor is fixed. PX4's own documentation channel-maps this as two tilting nacelles plus one fixed motor &mdash; the same 2-tilt-plus-1-fixed layout as every other entry in this section, despite some of PX4's own phrasing describing "three fixed motors... paired with two tilt servos" in a way that reads ambiguously out of context.</p>
+
+      <h2>Airframe &amp; body design</h2>
+      <p>650mm wingspan, 680mm length, 771g flying weight. Foam construction with carbon-fiber reinforcement, in keeping with typical ready-to-fly hobby foam aircraft.</p>
+
+      <h2>What's distinctive</h2>
+      <p>This is the only design surveyed here sold as a complete, ready-to-fly commercial product rather than a kit, a set of files, or a research prototype &mdash; and PX4 maintains an official "E-flite Convergence" VTOL tiltrotor frame class and reference wiki page for it, making it a common starting point for hobbyists who want to run PX4 on a proven commercial tricopter airframe rather than build one from scratch.</p>
+
+      <h2>Flight controller &amp; software</h2>
+      <p>Stock units ship with a proprietary flight controller. The aftermarket path documented by PX4 itself replaces this with a Pixhawk-class board &mdash; originally the (now discontinued) Pixfalcon, with Pixhawk 4 Mini or Holybro Pixhawk Mini given as current replacements, selecting the "E-flite Convergence" VTOL Tiltrotor frame class in QGroundControl.</p>
+
+      <h2>Cost</h2>
+      <p>No current retail price was confirmed during this research &mdash; Horizon Hobby has listed the Convergence historically, but check their current listing directly rather than relying on an old figure, since retail availability and pricing for this product move.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Sources</span>
+      <ul>
+        <li><a href="https://docs.px4.io/main/en/frames_vtol/vtol_tiltrotor_eflite_convergence_pixfalcon" target="_blank" rel="noopener">E-flite Convergence VTOL Tiltrotor &mdash; PX4 docs</a></li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in Landscape</span>
+      <ul>
+        <li><a href="flightory-stallion-vtol.html">Flightory Stallion VTOL</a></li>
+        <li><a href="minihawk-vtol.html">MiniHawk VTOL</a></li>
+        <li><a href="hackaday-tilt-rotor-rc-aircraft.html">Hackaday Tilt Rotor VTOL RC Aircraft</a></li>
+        <li><a href="flightwave-edge-130.html">FlightWave Edge 130 / Edge 130 Blue</a></li>
+        <li><a href="nudt-tilt-tri-rotor-research.html">NUDT tilt tri-rotor UAV research line</a></li>
+        <li><a href="shen-liu-tilt-rotor-tricopter.html">Shen &amp; Liu tilt-rotor tri-copter (2025)</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Landscape</span>
+      <span><a href="index.html">&larr; Back to Landscape</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
