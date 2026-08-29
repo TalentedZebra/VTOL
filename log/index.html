@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build Log &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="../research/index.html">Research &amp; Principles</a>
+      <a href="../landscape/index.html">Landscape</a>
+      <a href="../shopping-list.html">Shopping List</a>
+      <a href="index.html" aria-current="page">Build Log</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:900px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Field manual</span>
+      <h1>Build Log</h1>
+      <p class="sub">Real milestones, test results, part arrivals, and failures, logged as they happen &mdash; newest first. Ask Claude Code to log an update and it edits <code>entries.json</code> directly; this page just renders whatever's in there.</p>
+    </div>
+
+    <div id="entries"></div>
+    <p id="empty-state" class="muted" hidden>No entries yet.</p>
+    <p id="error-state" class="muted" hidden>Couldn't load the log entries. If you're viewing this file directly from disk, run <code>serve-local.sh</code> (or any local static server) instead &mdash; browsers block a plain-file fetch of <code>entries.json</code>.</p>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Build Log</span>
+      <span><a href="../index.html">&larr; Back to the build manual</a></span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function formatDate(iso){
+    var parts = iso.split('-').map(Number);
+    if (parts.length !== 3) return iso;
+    return MONTHS[parts[1]-1] + ' ' + parts[2] + ', ' + parts[0];
+  }
+
+  function phaseLabel(phase){
+    var n = phase.replace(/^p/, '');
+    return 'Phase ' + (n.length === 1 ? '0' + n : n);
+  }
+
+  function render(entries){
+    var container = document.getElementById('entries');
+    var emptyState = document.getElementById('empty-state');
+    if (!entries.length){
+      emptyState.hidden = false;
+      return;
+    }
+    var newestFirst = entries.slice().reverse();
+    newestFirst.forEach(function(entry){
+      var card = document.createElement('div');
+      card.className = 'callout';
+
+      var eyebrow = document.createElement('span');
+      eyebrow.className = 'eyebrow';
+      eyebrow.innerHTML = '<time datetime="' + entry.date + '">' + formatDate(entry.date) + '</time>' +
+        (entry.phase ? ' &middot; <span class="pill optional">' + phaseLabel(entry.phase) + '</span>' : '');
+      card.appendChild(eyebrow);
+
+      var h3 = document.createElement('h3');
+      h3.textContent = entry.title;
+      card.appendChild(h3);
+
+      var body = document.createElement('div');
+      body.innerHTML = entry.body;
+      card.appendChild(body);
+
+      container.appendChild(card);
+    });
+  }
+
+  fetch('entries.json')
+    .then(function(res){
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(render)
+    .catch(function(){
+      document.getElementById('error-state').hidden = false;
+    });
+})();
+</script>
+</body>
+</html>

@@ -40,6 +40,16 @@ see "The Landscape section" below for the separation rule between them.
   touch `styles.css` itself.
 - `assets/progress.js` — the checklist-progress-tracking script. Include on any page
   with `.checklist` elements; safe to include everywhere else too.
+- `shopping-list.html` — one master ordering checklist pulling together every part
+  mentioned across Phase 04 and the budget table (motors, ESCs, servos, FC, radio,
+  batteries, propellers, airframe materials, consumables, FAA registration, Remote ID).
+  **Hand-authored, not generated** — it duplicates the budget table/Phase 04 rather than
+  reading from them, since this is a static site with no build step. Whenever the budget
+  table or Phase 04 changes, `shopping-list.html` needs a matching manual update; nothing
+  keeps them in sync automatically.
+- `log/` — the build log: `log/entries.json` (a plain JSON array of dated entries) and
+  `log/index.html` (fetches and renders it, newest first). See "Build log" below for the
+  logging workflow and its git-workflow exception.
 - `serve-local.sh` — local static-file server for previewing the site before merging
   (mirrors how GitHub Pages serves relative paths).
 
@@ -135,6 +145,25 @@ one of these pages, check that date. If it's more than roughly **4–6 months ol
 to the user as due for re-verification rather than assuming the prices/products listed are
 still accurate or in stock; don't silently treat old snapshot data as current.
 
+## Build log
+
+`log/entries.json` is a plain JSON array of entries, newest-last (append to the end),
+each shaped `{ "date": "YYYY-MM-DD", "title": "...", "phase": "p7" (optional), "body":
+"<p>...</p>" }` — `body` is a small HTML fragment, not markdown. `log/index.html` fetches
+this file and renders entries newest-first; it has no other data source.
+
+- **Log implicitly, don't wait to be asked.** Whenever the user reports something that
+  actually happened in the build — a test result, a part arriving, a failure, a milestone
+  — treat that as an implicit request to append a `log/entries.json` entry, the same
+  session, without requiring them to explicitly say "log this." Only skip it if they say
+  otherwise.
+- **Git-workflow exception, scoped narrowly to this one file**: `log/entries.json` entries
+  may be committed directly to `main`, skipping the branch+PR flow, specifically because
+  it's low-risk, append-only, frequent, personal journal content. **This exception applies
+  to `log/entries.json` alone** — it is not a general loosening of the git workflow.
+  `log/index.html` itself, and everything else in the repo, still goes through the normal
+  branch → commit → push → PR flow, including the initial creation of the `log/` structure.
+
 ## Who this is for
 
 Built by a Multidisciplinary Engineering Technology (Mechatronics track) student at
@@ -158,6 +187,9 @@ and new content should teach the *why*, not just state a conclusion.
 - Always add real, working links — never a fabricated citation.
 
 ## Git workflow — non-negotiable for any change to the site
+
+**Exception**: `log/entries.json` may be committed directly to `main` — see "Build log"
+above. Everything else in this section applies with no exceptions.
 
 - Always work on a new branch for any change (`git checkout -b <descriptive-name>`).
 - Commit, then `git push -u origin <branch>`, then open a PR with `gh pr create`.

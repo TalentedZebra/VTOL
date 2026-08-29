@@ -1,0 +1,7 @@
+[
+  {
+    "date": "2026-08-29",
+    "title": "Build log created",
+    "body": "<p>Set up this build log to track real milestones, test results, part arrivals, and failures as they actually happen &mdash; separate from the static build manual and research pages, which document the plan rather than the day-to-day.</p><p>Entries get appended here going forward. Ask Claude Code to log an update and it edits <code>entries.json</code> directly.</p>"
+  }
+]
