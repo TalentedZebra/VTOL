@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component Selection Guide &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+      <a href="../landscape/index.html">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 09</span>
+      <h1>Component Selection Guide</h1>
+      <p class="sub">How to actually evaluate and compare real motors, ESCs, servos, flight controllers, and batteries &mdash; the criteria and common mistakes that stay true regardless of which specific products exist when you're reading this. For the underlying physics of what these parts do, see <a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a>; this page is the comparison/buying layer on top of that theory.</p>
+    </div>
+
+    <div class="article">
+      <h2>Motors</h2>
+      <p>Hobby brushless motors are conventionally sized with a 4-digit stator code (e.g. 2807): the first two digits are stator width in mm, the last two are stator height &mdash; a quick way to compare physical motor size across brands before even looking at kV.</p>
+      <p>The single most useful sizing rule of thumb: total maximum thrust across all motors should be at least <strong>2&times; the aircraft's all-up weight</strong>, giving margin for wind, maneuvering, and battery sag rather than a bare hover-at-full-throttle design. Don't size off kV and wattage alone &mdash; a specific kV rating tells you almost nothing about real thrust without knowing the propeller and voltage it's paired with. Reputable motor manufacturers publish actual bench-test thrust/current/efficiency tables across multiple prop and voltage combinations; use those over a kV number and a marketing thrust claim whenever they're available.</p>
+      <p><strong>Common mistake:</strong> trusting a motor's advertised max thrust figure without checking what prop and voltage it was tested at &mdash; the number on the box is frequently a best-case combination you may not be running.</p>
+
+      <h2>ESCs</h2>
+      <p>Pick continuous current rating with real headroom above your calculated peak draw, not right at the edge of it &mdash; sustained hover is the highest-current flight mode this airframe sees, and an ESC run near its limit for minutes at a time is a common cause of in-flight thermal failure that a quick bench test won't reveal. Larger MOSFETs generally mean more current/voltage headroom and better tolerance of voltage spikes, which matters more as cell count goes up (a 6S setup stresses an ESC's MOSFETs harder than 4S at the same current).</p>
+      <p>Firmware matters too: <strong>BLHeli_S</strong> is older 8-bit firmware still common on budget ESCs; <strong>AM32</strong> is a modern, actively-developed open-source replacement; <strong>BLHeli_32</strong> is the most feature-rich option (bidirectional telemetry, RPM-based filtering) but is closed-source and had its development and licensing terminated in 2024, per firmware-comparison reporting available at time of writing &mdash; re-check the current state of BLHeli_32 support before depending on it for a new build. AM32 is the actively-maintained, open path if firmware longevity matters to you.</p>
+      <p><strong>Common mistake:</strong> sizing an ESC's current rating off manufacturer-claimed <em>burst</em> current rather than <em>continuous</em> current &mdash; hover is a sustained load, not a burst.</p>
+
+      <h2>Servos</h2>
+      <p>Two numbers define a servo: <strong>torque</strong> (commonly kg&middot;cm) and <strong>speed</strong> (seconds per 60&deg; of rotation) &mdash; and they trade against each other within a given servo class and voltage. Voltage class matters directly: standard analog servos (roughly 4.8&ndash;6V) are cheaper and slower; digital or "HV" (high-voltage, roughly 6&ndash;8.4V) servos cost more but deliver meaningfully more torque and speed from the same physical size. Metal gears resist stripping under sustained or shock loading better than plastic/nylon gears, at added cost and weight.</p>
+      <p>This project's own build has two genuinely different servo jobs, and sizing them the same way is a mistake: elevon/control-surface servos only fight aerodynamic hinge moments, while <strong>tilt-mechanism servos</strong> have to move a live, spinning motor mass against both aerodynamic loading and gyroscopic precession &mdash; see <a href="airframe-and-body-design.html">Airframe &amp; Body Design</a> for why that's a structurally different job. Size tilt servos from their actual working load, not from a generic "servo for a plane this size" rule of thumb.</p>
+      <p><strong>Common mistake:</strong> reusing a control-surface torque/speed spec for a tilt servo, then discovering in testing that it can't hold the nacelle steady against prop torque and vibration in hover.</p>
+
+      <h2>Flight controllers</h2>
+      <p>Beyond raw processing power, the criteria that actually matter for this airframe type: enough PWM/servo outputs for two tilt servos, elevons, and however many motor channels your layout needs (a board designed for a simple quad will often come up short); an active, documented firmware ecosystem behind it (dRehmFlight or ArduPilot, in this project's case &mdash; see the build manual's own flight-controller decision for the reasoning behind that specific choice, which isn't repeated here since it's a project-specific decision, not a general selection criterion); and genuinely active maintenance and community support, since a board whose firmware has gone stale is a real long-term risk even if its specs look fine on paper today.</p>
+      <p><strong>Common mistake:</strong> picking a flight-controller board based on processor specs alone, then discovering mid-build that it doesn't have enough physical outputs for a tilt-rotor's servo/motor count.</p>
+
+      <h2>Batteries</h2>
+      <p>Treat printed capacity and C-rating as a starting point, not a guarantee &mdash; both are manufacturer-claimed numbers, and real-world sustained discharge is often lower than the label, especially as a pack ages. Where possible, weight your buying decision toward brands and packs with independent, bench-tested discharge reviews (RC community forums and reviewers regularly publish exactly this kind of independent verification) over an unfamiliar brand's aggressive-sounding C-rating claim alone. For the actual sizing methodology (how capacity and C-rating translate into your specific flight-time and current-draw targets), see Phase 03 of the build manual and the <a href="https://www.ecalc.ch/xcoptercalc.php" target="_blank" rel="noopener">eCalc</a> tools already referenced there.</p>
+      <p><strong>Common mistake:</strong> choosing a pack purely on its advertised C-rating number without checking whether that number has ever been independently verified for that specific brand/pack.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Further reading</span>
+      <ul>
+        <li><a href="https://oscarliang.com/motors/" target="_blank" rel="noopener">How to Choose FPV Drone Motors &mdash; Oscar Liang</a></li>
+        <li><a href="https://oscarliang.com/esc/" target="_blank" rel="noopener">How to Choose the Best ESC for FPV Drones &mdash; Oscar Liang</a></li>
+        <li><a href="https://oscarliang.com/blheli-32-overview/" target="_blank" rel="noopener">BLHeli_32 ESC Firmware Overview &mdash; Oscar Liang</a></li>
+        <li><a href="https://ardupilot.org/copter/docs/common-blheli32-passthru.html" target="_blank" rel="noopener">BLHeli32, AM32, and BLHeli_S ESCs &mdash; ArduPilot Copter documentation</a></li>
+        <li><a href="https://servodatabase.com/" target="_blank" rel="noopener">ServoDatabase</a> &mdash; searchable servo specs (torque, speed, voltage, gear material) for real comparison across brands.</li>
+        <li><a href="https://www.ecalc.ch/" target="_blank" rel="noopener">eCalc</a> &mdash; plug in real motor/prop/battery combinations for BEMT-based performance predictions.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+        <li><a href="reference-design-stallion.html">Reference Design: Flightory Stallion VTOL</a></li>
+        <li><a href="airframe-and-body-design.html">Airframe &amp; Body Design</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
