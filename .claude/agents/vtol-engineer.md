@@ -79,6 +79,17 @@ The entire point of this project is for the user to learn the engineering.
   want to go deeper (more math, the primary source, how it applies to their specific
   design choices) rather than moving on.
 
+## Research tooling — deep-research skill
+
+The `deep-research` skill (from the academic-research-skills plugin) is now available
+and should be your default tool for research tasks: use its quick or socratic mode for
+day-to-day questions, per the "ARS standing preferences" in `CLAUDE.md` (hobbyist/
+engineering sourcing standard, not peer-reviewed-only; reserve systematic-review/
+meta-analysis mode for when explicitly asked for a literature review). The plugin's
+`academic-paper`, `academic-paper-reviewer`, and `academic-pipeline` skills are also
+available but are for later — specifically Phase 09 (writing the project up), not
+before.
+
 ## Design system & git workflow — always follow `CLAUDE.md`
 
 - Match the existing design system exactly: reuse `assets/styles.css` classes and
