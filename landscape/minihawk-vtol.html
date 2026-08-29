@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniHawk VTOL &mdash; Landscape &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="../research/index.html">Research &amp; Principles</a>
+      <a href="index.html" aria-current="page">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Landscape &middot; Open-source / DIY &middot; 02</span>
+      <h1>MiniHawk VTOL</h1>
+      <p class="sub">An 800mm open-source tilt-rotor tricopter with a plank-style flying wing &mdash; one of the earliest and most-referenced designs in this exact configuration, and the design this project's own build manual cites as its closest open-source precedent.</p>
+    </div>
+
+    <div class="article">
+      <p class="lede">MiniHawk's own repository describes its layout directly: "the forward pair tilting for forward flight and yaw control, and the rear motor fixed for hover only" &mdash; the same 2-tilt-plus-1-fixed configuration surveyed across this whole section.</p>
+
+      <h2>Configuration</h2>
+      <p>Two front motors (2207/2306-class, roughly 2500kV) tilt via a servo linkage between vertical and horizontal; one rear motor (also 2207/2306-class, roughly 2000kV) stays fixed and runs only in hover.</p>
+
+      <h2>Airframe &amp; body design</h2>
+      <p>800mm wingspan, roughly 1000&ndash;1200g all-up weight (the bare airframe alone is about 460g). The wing is a "plank"-style flying wing with internal wire conduits routed through the structure, living-hinge elevons molded directly into the wing rather than hinged separately, and a carbon-fiber spar for bending stiffness. Construction is FDM 3D printing in PLA.</p>
+
+      <h2>What's distinctive</h2>
+      <p>The plank-wing-with-living-hinge approach is a notably different structural strategy from the Stallion's more conventional wing-plus-separate-control-surface layout, and MiniHawk is smaller and lighter than most of the other designs surveyed here &mdash; closer to this project's own ~700&ndash;900mm target class than the Stallion is.</p>
+
+      <h2>Flight controller &amp; software</h2>
+      <p>ArduPlane, typically on an mRo PixRacer Pro or a Matek F405/F765-WING board. The project also has a Betaflight-VTOL branch, though ArduPlane appears to be the primary, more actively documented path.</p>
+
+      <h2>Cost</h2>
+      <p>No stated total build cost. Based on the parts list alone, electronics run roughly $300&ndash;500 &mdash; an approximate inference, not a figure MiniHawk's own documentation states directly, so confirm current part prices before budgeting from it.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Sources</span>
+      <ul>
+        <li><a href="https://github.com/StephenCarlson/MiniHawk-VTOL" target="_blank" rel="noopener">MiniHawk VTOL &mdash; GitHub</a></li>
+        <li><a href="https://hackaday.io/project/175286-minihawk-vtol" target="_blank" rel="noopener">MiniHawk VTOL build log &mdash; Hackaday.io</a></li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in Landscape</span>
+      <ul>
+        <li><a href="flightory-stallion-vtol.html">Flightory Stallion VTOL</a></li>
+        <li><a href="hackaday-tilt-rotor-rc-aircraft.html">Hackaday Tilt Rotor VTOL RC Aircraft</a></li>
+        <li><a href="eflite-convergence.html">E-flite Convergence</a></li>
+        <li><a href="flightwave-edge-130.html">FlightWave Edge 130 / Edge 130 Blue</a></li>
+        <li><a href="nudt-tilt-tri-rotor-research.html">NUDT tilt tri-rotor UAV research line</a></li>
+        <li><a href="shen-liu-tilt-rotor-tricopter.html">Shen &amp; Liu tilt-rotor tri-copter (2025)</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Landscape</span>
+      <span><a href="index.html">&larr; Back to Landscape</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
