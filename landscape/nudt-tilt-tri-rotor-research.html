@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUDT Tilt Tri-Rotor UAV Research Line &mdash; Landscape &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="../research/index.html">Research &amp; Principles</a>
+      <a href="index.html" aria-current="page">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Landscape &middot; Academic / research &middot; 06</span>
+      <h1>NUDT tilt tri-rotor UAV research line</h1>
+      <p class="sub">A multi-paper Chinese academic research program (National University of Defense Technology) studying tilt tri-rotor modeling, attitude control, and hover-to-cruise mode conversion &mdash; a sustained research effort rather than a single one-off paper.</p>
+    </div>
+
+    <div class="article">
+      <p class="lede">This entry covers a line of related work rather than one paper. The best-documented single source, independently fetched and read in full, is Chen, Zhang, Wang, Shen &amp; Li's 2021 SAGE paper on conversion control; other papers in the same line (Yu &amp; Zhang 2017, an earlier Chen et al. 2017 flight-test paper, and a related Springer book chapter) are referenced here but weren't all independently confirmed in full &mdash; see the note on flight-test claims below.</p>
+
+      <h2>Configuration</h2>
+      <p>Three fixed-pitch rotors: two front rotors tilt from &minus;20&deg; to 90&deg; via servo actuation, and one tail rotor stays fixed. Control allocation is explicit in the 2021 paper: roll comes from differential thrust between the two front rotors, and yaw comes from differential tilt angle between them &mdash; the fixed rear rotor's role is thrust/force compensation rather than directly generating roll or yaw.</p>
+
+      <h2>Airframe &amp; body design</h2>
+      <p>Per the 2021 paper's own specification table: maximum weight 6.89kg, 1.8m wingspan, 1.6m length, 0.4m&sup2; wing area, 20 m/s cruise speed. No construction-material details were found.</p>
+
+      <h2>What's distinctive</h2>
+      <p>This is the heaviest and largest design surveyed in this section by a wide margin (6.89kg vs. 2&ndash;3kg for the Stallion, the next largest) and is explicitly framed around modeling uncertainty and robust conversion control &mdash; the 2021 paper's stated contribution is control design that specifically handles unmodeled dynamics during the hover-to-cruise transition, not just baseline attitude control.</p>
+
+      <h2>Flight controller &amp; software</h2>
+      <p>Research-specific flight-control software described in the papers themselves; not a named commercial or open-source firmware project.</p>
+
+      <h2>Cost</h2>
+      <p>Research prototype &mdash; no public pricing.</p>
+
+      <h2>A note on flight-test claims</h2>
+      <p>The 2021 SAGE paper's own results are simulation-only (its reported conversion-mode duration and deviation figures come from simulation, not flight data) &mdash; it should not be cited as flight-tested. A separate, earlier paper in the same research line is explicitly titled "Control and flight test of a tilt-rotor unmanned aerial vehicle" (Chen, Zhang, Zhang &amp; Shen, 2017), which likely is the flight-tested work, but its abstract/full text couldn't be loaded during this research (the journal page redirected to its homepage). Treat any flight-test claim for this research line as attributable to that 2017 paper specifically, and unconfirmed until someone reads it directly.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Sources</span>
+      <ul>
+        <li><a href="https://journals.sagepub.com/doi/10.1177/17298814211027033" target="_blank" rel="noopener">Conversion control of a tilt tri-rotor unmanned aerial vehicle with modeling uncertainty &mdash; Chen, Zhang, Wang, Shen &amp; Li, SAGE IJARS 2021</a></li>
+        <li><a href="https://journals.sagepub.com/doi/full/10.1177/1729881416678141" target="_blank" rel="noopener">Control and flight test of a tilt-rotor unmanned aerial vehicle &mdash; Chen, Zhang, Zhang &amp; Shen, 2017</a> (flight-test claim not independently confirmed &mdash; page did not load during this research)</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in Landscape</span>
+      <ul>
+        <li><a href="flightory-stallion-vtol.html">Flightory Stallion VTOL</a></li>
+        <li><a href="minihawk-vtol.html">MiniHawk VTOL</a></li>
+        <li><a href="hackaday-tilt-rotor-rc-aircraft.html">Hackaday Tilt Rotor VTOL RC Aircraft</a></li>
+        <li><a href="eflite-convergence.html">E-flite Convergence</a></li>
+        <li><a href="flightwave-edge-130.html">FlightWave Edge 130 / Edge 130 Blue</a></li>
+        <li><a href="shen-liu-tilt-rotor-tricopter.html">Shen &amp; Liu tilt-rotor tri-copter (2025)</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Landscape</span>
+      <span><a href="index.html">&larr; Back to Landscape</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

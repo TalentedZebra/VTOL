@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flightory Stallion VTOL &mdash; Landscape &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="../research/index.html">Research &amp; Principles</a>
+      <a href="index.html" aria-current="page">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1000px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Landscape &middot; Open-source / DIY &middot; 01</span>
+      <h1>Flightory Stallion VTOL</h1>
+      <p class="sub">A 3D-printed, open-source tilt-rotor tricopter at a notably larger scale than most hobby VTOL builds &mdash; and the design this project itself is using as its own v1 reference build.</p>
+    </div>
+
+    <div class="article">
+      <p class="lede">This entry is a neutral profile of the design itself. For this project's own reasoning on why it was chosen as our v1 build (vs. a fully custom or semi-custom path), see <a href="../research/reference-design-stallion.html">Reference Design: Flightory Stallion VTOL</a> in Research &amp; Principles &mdash; that page covers the build-vs-custom tradeoffs; this one just describes what the Stallion is.</p>
+
+      <h2>Configuration</h2>
+      <p>Flightory's own product page describes the VTOL conversion as a "tricopter layout design with front tilt and a rear stationary motor" &mdash; two wingtip motors tilt on servos between vertical and horizontal, and one fixed rear motor runs only in hover for yaw authority and extra lift.</p>
+
+      <h2>Airframe &amp; body design</h2>
+      <p>1340mm wingspan, 990mm length, 1500&ndash;3000g all-up weight for the base airframe (2000&ndash;3000g once converted to VTOL). The wing uses an Eppler E205 airfoil with a V-tail on a single tail boom, and the whole structure is 3D-printed in LW-PLA and PETG. Stated cruise speed is 60&ndash;70 km/h at 0&ndash;2&deg; angle of attack, with the wing's CG placed 60mm from the leading edge for what Flightory describes as zero pitching moment at zero angle of attack &mdash; a no-trim cruise design.</p>
+
+      <h2>What's distinctive</h2>
+      <p>Scale is the standout feature: at 1340mm and 2&ndash;3kg, it's substantially larger than most of the other tricopter tilt-rotor designs surveyed here (MiniHawk at 800mm, the E-flite Convergence at 650mm). Flightory states the design is CFD-validated and flight-tested, and recommends specific hardware for the VTOL conversion: Emax ECO II 2807 1300KV or T-Motor F90 1300KV motors, Kingmax 1203MD or GDW DS041MG tilt servos, and BLHeli_S 45A or Lumenier 51A ESCs.</p>
+
+      <h2>Flight controller &amp; software</h2>
+      <p>SpeedyBee F405 Wing running ArduPilot (per background reporting on the build; not stated on Flightory's own product pages).</p>
+
+      <h2>Cost</h2>
+      <p>Files: $49.98 (base airframe $34.99 + VTOL conversion pack $14.99). Electronics using Flightory's recommended hardware run roughly $350&ndash;500+, though a complete parts-and-filament total wasn't independently verified &mdash; confirm current prices before ordering.</p>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Sources</span>
+      <ul>
+        <li><a href="https://flightory.com/product/stallion/" target="_blank" rel="noopener">Stallion &mdash; Flightory</a></li>
+        <li><a href="https://flightory.com/product/stallion-vtol/" target="_blank" rel="noopener">Stallion VTOL Pack &mdash; Flightory</a></li>
+        <li><a href="https://dronexl.co/2025/04/04/3d-printed-stallion-drone-diy-fixed-wing/" target="_blank" rel="noopener">3D-Printed Stallion Drone &mdash; DroneXL</a></li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in Landscape</span>
+      <ul>
+        <li><a href="minihawk-vtol.html">MiniHawk VTOL</a></li>
+        <li><a href="hackaday-tilt-rotor-rc-aircraft.html">Hackaday Tilt Rotor VTOL RC Aircraft</a></li>
+        <li><a href="eflite-convergence.html">E-flite Convergence</a></li>
+        <li><a href="flightwave-edge-130.html">FlightWave Edge 130 / Edge 130 Blue</a></li>
+        <li><a href="nudt-tilt-tri-rotor-research.html">NUDT tilt tri-rotor UAV research line</a></li>
+        <li><a href="shen-liu-tilt-rotor-tricopter.html">Shen &amp; Liu tilt-rotor tri-copter (2025)</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Landscape</span>
+      <span><a href="index.html">&larr; Back to Landscape</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landscape &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="../research/index.html">Research &amp; Principles</a>
+      <a href="index.html" aria-current="page">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1100px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Landscape</span>
+      <h1>Real tricopter tilt-rotor VTOLs, across the hobby, industry, and research</h1>
+      <p class="sub">This section is deliberately separate from the <a href="../index.html">build manual</a> and <a href="../research/index.html">Research &amp; Principles</a>, which are both about <em>this</em> build. Landscape surveys the aircraft <em>type</em> broadly &mdash; real, documented tricopter tilt-rotor designs from other builders, companies, and researchers &mdash; so this project's own choices don't get mistaken for the only way to build one, or for universal recommendations.</p>
+    </div>
+
+    <div class="article">
+      <p class="lede">Every entry here is a real, sourced design &mdash; no invented specs, no fabricated citations. Where a spec or claim couldn't be independently confirmed, the entry says so rather than guessing.</p>
+
+      <h2>What counts as "tricopter tilt-rotor" here</h2>
+      <p>This is a specific, narrow configuration, and it's easy to miscategorize: <strong>two wingtip motors that tilt between vertical (hover) and horizontal (cruise), plus one fixed motor</strong> (typically at the tail) that only runs in hover, for yaw authority and extra lift. Searching for "tilt-rotor tricopter" or "tri-rotor VTOL" turns up a lot of designs that sound similar but aren't this:</p>
+      <ul>
+        <li><strong>Tailsitters</strong> &mdash; the whole airframe pitches 90&deg; between hover and cruise; no individual motors tilt at all.</li>
+        <li><strong>Tiltwings</strong> &mdash; the whole wing (not just the motor/nacelle) rotates; a real design found during this survey (KAIST's "Tri-Copter UAV with Individually Tilted Main Wings") has "tricopter" in its own name but is a tiltwing, not a tilt-rotor.</li>
+        <li><strong>Quadplanes</strong> &mdash; four or more fixed hover motors plus a separate fixed forward-cruise motor; no tilt mechanism anywhere.</li>
+        <li><strong>2-motor (V-22-style) tilt-rotors</strong> and <strong>all-3-motor-tilt designs</strong> &mdash; both real configurations, but different ones from the 2-tilt-plus-1-fixed layout this project and every entry below actually uses.</li>
+      </ul>
+      <p>Every design on this page was checked against that specific definition before being included. A few candidates that looked promising in a first search pass turned out, on closer reading, to be one of the categories above (or simply unverifiable) &mdash; they're left out rather than stretched to fit.</p>
+
+      <h2>Comparison across surveyed designs</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Design</th><th>Category</th><th>Wingspan</th><th>AUW</th><th>Tilt mechanism</th><th>Flight controller / firmware</th><th>Build method</th><th class="num">Approx. cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><a href="flightory-stallion-vtol.html">Flightory Stallion VTOL</a></td><td>Open-source / DIY</td><td>1340mm</td><td>2000&ndash;3000g</td><td>Servo-actuated front tilt, ~90&deg;</td><td>SpeedyBee F405 Wing + ArduPilot</td><td>3D-printed (LW-PLA + PETG)</td><td class="num">$49.98 files + ~$350&ndash;500+ electronics</td></tr>
+            <tr><td><a href="minihawk-vtol.html">MiniHawk VTOL</a></td><td>Open-source / DIY</td><td>800mm</td><td>1000&ndash;1200g</td><td>Servo linkage, front tilt</td><td>ArduPlane (PixRacer Pro / Matek F405/F765-WING)</td><td>3D-printed (PLA) + carbon spar</td><td class="num">~$300&ndash;500 electronics (approximate)</td></tr>
+            <tr><td><a href="hackaday-tilt-rotor-rc-aircraft.html">Hackaday Tilt Rotor VTOL RC Aircraft</a></td><td>Open-source / DIY</td><td>Not stated</td><td>Not stated</td><td>Front rotors tilt full 90&deg;, ~5&deg; differential in hover for yaw</td><td>Custom electronics + custom firmware (unnamed)</td><td>Foam board + bamboo skewers</td><td class="num">~$2 airframe material (electronics unpriced)</td></tr>
+            <tr><td><a href="eflite-convergence.html">E-flite Convergence</a></td><td>Commercial / prosumer (RTF)</td><td>650mm</td><td>771g</td><td>Servo-actuated nacelle tilt</td><td>Stock proprietary FC; PX4 (Pixhawk-class) as documented swap</td><td>Foam + carbon reinforcement</td><td class="num">Check current retailer listing</td></tr>
+            <tr><td><a href="flightwave-edge-130.html">FlightWave Edge 130 / Edge 130 Blue</a></td><td>Commercial (military/ISR)</td><td>130cm&times;77cm</td><td>1200g</td><td>Proprietary "tilt-pod technology"</td><td>Listed as a PX4 project (unconfirmed); proprietary Mission Planner also referenced</td><td>Not publicly detailed</td><td class="num">Not publicly priced (institutional sales)</td></tr>
+            <tr><td><a href="nudt-tilt-tri-rotor-research.html">NUDT tilt tri-rotor UAV research line</a></td><td>Academic / research</td><td>1.8m</td><td>Max 6.89kg</td><td>Servo-actuated front tilt, &minus;20&deg; to 90&deg;</td><td>Research flight-control software (paper-specific)</td><td>Research prototype</td><td class="num">No public pricing</td></tr>
+            <tr><td><a href="shen-liu-tilt-rotor-tricopter.html">Shen &amp; Liu tilt-rotor tri-copter (2025)</a></td><td>Academic / research</td><td>Not found</td><td>Not found</td><td>Custom tilting mechanism (per abstract)</td><td>Classical PID (per abstract)</td><td>Flying-wing prototype (per abstract)</td><td class="num">No public pricing</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top:6px; font-size:0.85rem;">Where a cell says "per abstract," "not stated," or similar, the underlying source didn't confirm that detail directly &mdash; see that design's own page for exactly what is and isn't verified.</p>
+    </div>
+
+    <div class="research-grid" style="margin-top:12px;">
+      <a class="research-card" href="flightory-stallion-vtol.html">
+        <h3>Flightory Stallion VTOL</h3>
+        <p>An open-source, 3D-printed 1340mm design &mdash; the same layout and scale class this project already uses as its own v1 reference build.</p>
+        <span class="read-link">Read &rarr;</span>
+      </a>
+      <a class="research-card" href="minihawk-vtol.html">
+        <h3>MiniHawk VTOL</h3>
+        <p>An 800mm open-source tilt-rotor tricopter with a plank-style flying wing and a living-hinge elevon design.</p>
+        <span class="read-link">Read &rarr;</span>
+      </a>
+      <a class="research-card" href="hackaday-tilt-rotor-rc-aircraft.html">
+        <h3>Hackaday Tilt Rotor VTOL RC Aircraft</h3>
+        <p>A scratch-built, foam-board-and-bamboo tilt-rotor tricopter built on top of an existing Flite Test flying-wing design.</p>
+        <span class="read-link">Read &rarr;</span>
+      </a>
+      <a class="research-card" href="eflite-convergence.html">
+        <h3>E-flite Convergence</h3>
+        <p>A commercial, ready-to-fly foam tilt-rotor tricopter &mdash; the design PX4 itself ships a reference configuration for.</p>
+        <span class="read-link">Read &rarr;</span>
+      </a>
+      <a class="research-card" href="flightwave-edge-130.html">
+        <h3>FlightWave Edge 130 / Edge 130 Blue</h3>
+        <p>A military/ISR-grade production tilt-rotor tricopter with proprietary tilt-pod technology and tool-free payload swaps.</p>
+        <span class="read-link">Read &rarr;</span>
+      </a>
+      <a class="research-card" href="nudt-tilt-tri-rotor-research.html">
+        <h3>NUDT tilt tri-rotor UAV research line</h3>
+        <p>A multi-paper Chinese academic research program studying tilt tri-rotor modeling, attitude control, and mode conversion.</p>
+        <span class="read-link">Read &rarr;</span>
+      </a>
+      <a class="research-card" href="shen-liu-tilt-rotor-tricopter.html">
+        <h3>Shen &amp; Liu tilt-rotor tri-copter (2025)</h3>
+        <p>A 2025 conference paper on a flying-wing tilt-rotor tri-copter configuration, with a fabricated and flight-tested prototype claimed.</p>
+        <span class="read-link">Read &rarr;</span>
+      </a>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Landscape</span>
+      <span><a href="../index.html">&larr; Back to the build manual</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
