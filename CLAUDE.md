@@ -6,7 +6,11 @@ A static, GitHub-Pages-hosted site (`https://talentedzebra.github.io/VTOL/`) doc
 from-scratch tilt-rotor tricopter VTOL build: two wingtip motors that tilt between vertical
 (hover) and horizontal (cruise), plus one fixed rear motor for hover yaw and extra lift.
 The site is both a build manual and a growing engineering reference — it's meant to keep
-accumulating real content over the life of the project, not stay static.
+accumulating real content over the life of the project, not stay static. The site has three
+clearly separated parts: the build manual (`index.html`) and `research/` document *this
+project's own* build and reasoning; `landscape/` is a neutral survey of the tricopter
+tilt-rotor VTOL aircraft *type* broadly, across other builders, companies, and researchers —
+see "The Landscape section" below for the separation rule between them.
 
 ### File structure
 
@@ -15,12 +19,19 @@ accumulating real content over the life of the project, not stay static.
   "Decision" callout pattern for major design choices. Checklist item ids (`p0-1`,
   `p4-8`, etc.) are keyed by `assets/progress.js` for localStorage-based progress
   tracking — never renumber or reuse an existing id.
-- `research/` — cited deep-dive pages: `research/index.html` is the hub; the six (and
-  growing) topic pages cover aerodynamics/airfoils, propulsion (motors/props/ESCs/
-  batteries), VTOL transition aerodynamics, flight control & PID, structures &
-  materials, and regulations & safety.
+- `research/` — cited deep-dive pages about *this project's own* build: `research/index.html`
+  is the hub; topic pages cover aerodynamics/airfoils, propulsion (motors/props/ESCs/
+  batteries), VTOL transition aerodynamics, flight control & PID, structures & materials,
+  regulations & safety, the Stallion reference-design comparison, airframe/body design,
+  a durable component-selection guide, and a dated parts/cost snapshot (see "Durable vs.
+  snapshot content" below) — growing over time, not a fixed set.
 - `content/research/NN-topic-name.md` — the source markdown each research page is
   transcribed from. When a research page changes, keep its source `.md` in sync.
+- `landscape/` — a neutral survey of real tricopter tilt-rotor VTOL designs across the
+  hobby, commercial, and academic world, *not* limited to this project's own choices.
+  `landscape/index.html` is the hub (with a cross-design comparison table);
+  `landscape/<design-name>.html` is one profile page per design. See "The Landscape
+  section" below for what belongs here vs. in `research/`.
 - `assets/styles.css` — the complete design system (colors, type, every component
   class). Reuse as-is; never redesign or restyle from scratch.
 - `assets/site.css` — small additive stylesheet layered on top of `styles.css` for
@@ -83,6 +94,46 @@ accumulating real content over the life of the project, not stay static.
 - **dRehmFlight has no built-in Remote ID broadcast** — unlike some ArduPilot/Pixhawk
   stacks, a standalone Remote ID module (or FRIA-only flying) is a real, budgeted line
   item, not an afterthought.
+
+## The Landscape section — keep it separated from this project's own research
+
+`landscape/` and `research/` (+ `index.html`) serve genuinely different purposes and must
+stay separated:
+
+- **`research/` and `index.html`** are about *this build*: what this project decided, why,
+  and the theory behind it. Anything framed as "here's what we're doing and why" belongs
+  here.
+- **`landscape/`** is a neutral survey of the aircraft *type*: real designs by other
+  builders, companies, and researchers, profiled factually (config, specs, cost, sources)
+  without arguing for or against this project's own choices. A landscape entry never
+  re-argues this project's build decisions (that stays in `research/reference-design-*`
+  pages); this project's own research pages never state a general landscape fact as if it
+  were universal (e.g. don't imply "V-tails are the right choice for tilt-rotor tricopters"
+  in `research/` — that's a landscape-level claim, and this project's own V-tail choice is
+  specific to the Stallion).
+- The two sections do cross-link (a `research/` page may point to a relevant `landscape/`
+  entry as a real-world example, and vice versa) — cross-linking is encouraged; blending
+  the two kinds of content into one page is not.
+- **Growth instruction**: when a research task (mine or an agent's own) turns up something
+  substantial and *durable* about tricopter tilt-rotor VTOLs generally — a new real design,
+  a correction to how an existing `landscape/` entry is documented, a genuinely new
+  category of design — propose adding or updating a `landscape/` entry, the same way
+  project-specific findings propose a `research/` update. Every `landscape/` entry must be
+  verified as the actual 2-tilt-plus-1-fixed-motor configuration (not a tailsitter,
+  tiltwing, quadplane, or a different tilt-motor count) before being added — see
+  `landscape/index.html`'s own "what counts as tricopter tilt-rotor" section for the exact
+  bar, and don't stretch a promising-looking candidate to fit it.
+
+## Durable vs. snapshot content
+
+Some pages are written to stay true regardless of which specific products exist later
+(e.g. `research/component-selection-guide.html`); others are explicitly dated snapshots of
+current products/prices (e.g. `research/parts-and-cost-snapshot.html`) that are *expected*
+to go stale. A page in the second category states its snapshot date at the top in the
+`.callout` "Snapshot notice" pattern (see that page for the exact wording) — when touching
+one of these pages, check that date. If it's more than roughly **4–6 months old**, flag it
+to the user as due for re-verification rather than assuming the prices/products listed are
+still accurate or in stock; don't silently treat old snapshot data as current.
 
 ## Who this is for
 
