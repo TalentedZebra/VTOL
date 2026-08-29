@@ -60,15 +60,29 @@ accumulating real content over the life of the project, not stay static.
   through transition (simpler attitude control) and it has real open-source precedent
   (MiniHawk VTOL) and a commercial reference (E-flite Convergence / PX4). A tailsitter
   is noted as a possible v2/stretch build, not the current target.
+- **v1 is the Flightory Stallion, v2 is a fully custom airframe** — v1 will be built
+  from the [Flightory Stallion](https://flightory.com/product/stallion/) base airframe
+  and its [VTOL conversion pack](https://flightory.com/product/stallion-vtol/)
+  (background: [DroneXL writeup](https://dronexl.co/2025/04/04/3d-printed-stallion-drone-diy-fixed-wing/)),
+  a real, documented tilt-rotor tricopter in the same 2-tilt-motor + 1-fixed-motor
+  layout as this project, already CFD-validated and flown by others. Building a proven
+  design first de-risks the electronics/assembly/flight-testing learning curve on its
+  own, before spending time on from-scratch aerodynamic sizing for a custom v2. See
+  `research/reference-design-stallion.html` for the full build-vs-custom comparison
+  this was based on. **This makes v1's airframe geometry and fabrication method
+  (3D-printed LW-PLA/PETG, ~1340mm span, ~2–3kg AUW) the Stallion's, not the
+  ~700–900mm class the budget table currently assumes** — the budget table, phase
+  checklists, and component-sizing guidance have not yet been updated to match and are
+  a known follow-up, not yet done as of this writing.
 - **dRehmFlight on a Teensy 4.0 for v1, not ArduPilot QuadPlane** — chosen because the
   goal is to read and understand the actual control loop (fits the Mechatronics track),
   not tune a black-box autopilot. Migrating to ArduPilot for autonomy features is a
-  possible v2 direction, not planned for v1.
+  possible v2 direction, not planned for v1. Note: the Stallion's own stock VTOL build
+  (SpeedyBee F405 Wing + ArduPilot) differs from this — reconciling that is part of the
+  same not-yet-done follow-up above, not a decision this bullet has settled.
 - **dRehmFlight has no built-in Remote ID broadcast** — unlike some ArduPilot/Pixhawk
   stacks, a standalone Remote ID module (or FRIA-only flying) is a real, budgeted line
   item, not an afterthought.
-- Fabrication method (3D-printed vs. balsa/foam) and exact airframe geometry are later,
-  per-build decisions (Phases 02–03), not yet fixed as of this writing.
 
 ## Who this is for
 

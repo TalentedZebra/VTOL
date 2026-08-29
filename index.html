@@ -85,6 +85,12 @@
       </div>
     </div>
 
+    <div class="callout">
+      <span class="eyebrow">Decision 2</span>
+      <h3>v1 is the Stallion, v2 is custom</h3>
+      <p>v1 will be built from the <a href="https://flightory.com/product/stallion/" target="_blank" rel="noopener">Flightory Stallion</a> base airframe and its <a href="https://flightory.com/product/stallion-vtol/" target="_blank" rel="noopener">VTOL conversion pack</a> (background: <a href="https://dronexl.co/2025/04/04/3d-printed-stallion-drone-diy-fixed-wing/" target="_blank" rel="noopener">DroneXL writeup</a>) &mdash; a real, documented tilt-rotor tricopter in the same 2-tilt-motor + 1-fixed-motor layout as this project, with its aerodynamic and structural sizing already CFD-validated and flown by others. Building a proven design first de-risks the electronics, assembly, and flight-testing learning curve on its own, before spending time on from-scratch aerodynamic sizing for a custom airframe. Once v1 is flying and its design choices actually make sense hands-on, v2 will be a fully custom airframe designed from scratch. See the <a href="research/reference-design-stallion.html">Reference Design: Flightory Stallion VTOL</a> page for the full build-vs-custom comparison this decision was based on.</p>
+    </div>
+
     <!-- PHASE 00 -->
     <details id="p0" class="phase" open>
       <summary>
@@ -135,7 +141,7 @@
         <ul class="checklist" data-phase="p1">
           <li class="check-item"><input type="checkbox" id="p1-1"><label for="p1-1">Read the MiniHawk VTOL build docs end to end &mdash; it's the closest open-source match to what you're building (800mm tilt-rotor tricopter, 3D-printed).</label></li>
           <li class="check-item"><input type="checkbox" id="p1-2"><label for="p1-2">Read ArduPilot's <a href="https://ardupilot.org/plane/docs/guide-tilt-rotor.html" target="_blank" rel="noopener">Tilt Rotor Planes</a> guide and skim the <a href="https://ardupilot.org/plane/docs/quadplane-building.html" target="_blank" rel="noopener">QuadPlane building guide</a> to see the parameter-level picture of how these are tuned.</label></li>
-          <li class="check-item"><input type="checkbox" id="p1-3"><label for="p1-3">Decide your flight-controller path now (see Decision 2 below) &mdash; it shapes every wiring and mounting choice from here on.</label></li>
+          <li class="check-item"><input type="checkbox" id="p1-3"><label for="p1-3">Decide your flight-controller path now (see Decision 3 below) &mdash; it shapes every wiring and mounting choice from here on.</label></li>
           <li class="check-item"><input type="checkbox" id="p1-4"><label for="p1-4">Write a one-page requirements sheet: wingspan target, all-up weight budget, hover time, cruise speed, payload (if any), and a hard "definition of done" for v1.</label></li>
           <li class="check-item"><input type="checkbox" id="p1-5"><label for="p1-5">Take the FAA TRUST test (free, ~20 min, required for recreational flying) and register the aircraft with the FAA once it's built if it's over 250g &mdash; do this early, not the week you want to fly.</label></li>
           <li class="check-item"><input type="checkbox" id="p1-6"><label for="p1-6">Identify your flight-test site: an AMA-affiliated club field gives you insurance coverage and open airspace clearance that a random field doesn't.</label></li>
@@ -166,15 +172,15 @@
       </summary>
       <div class="phase-body">
         <div class="phase-goal">
-          <p>Lock the layout on paper before touching CAD. This is where "Decision 2" (flight controller) and the airframe's rough geometry get fixed, because changing them later means re-cutting parts you already built.</p>
+          <p>Lock the layout on paper before touching CAD. This is where "Decision 3" (flight controller) and the airframe's rough geometry get fixed, because changing them later means re-cutting parts you already built.</p>
         </div>
         <div class="callout" style="margin:16px 0 10px;">
-          <span class="eyebrow">Decision 2</span>
+          <span class="eyebrow">Decision 3</span>
           <h3 style="font-size:1.1rem;">dRehmFlight vs. ArduPilot QuadPlane</h3>
           <p style="font-size:0.94rem;"><strong>dRehmFlight</strong> (runs on a $25 Teensy 4.0) is source code you read and edit directly &mdash; no GCS, no black-box autopilot logic. Best if the goal is to actually understand every line of the control loop, which fits a mechatronics track well. <strong>ArduPilot QuadPlane/tilt-rotor</strong> runs on a Pixhawk-class board, is far more capable (GPS waypoints, automatic transition, failsafes) but you're tuning parameters in an existing framework rather than writing the control code. Recommendation: start with dRehmFlight for v1 to learn the control theory hands-on, then consider migrating to ArduPilot for v2 once you want autonomy features.</p>
         </div>
         <ul class="checklist" data-phase="p2">
-          <li class="check-item"><input type="checkbox" id="p2-1"><label for="p2-1">Pick flight-controller hardware based on Decision 2 (Teensy 4.0 for dRehmFlight, or a Pixhawk/Matek F405-class board for ArduPilot).</label></li>
+          <li class="check-item"><input type="checkbox" id="p2-1"><label for="p2-1">Pick flight-controller hardware based on Decision 3 (Teensy 4.0 for dRehmFlight, or a Pixhawk/Matek F405-class board for ArduPilot).</label></li>
           <li class="check-item"><input type="checkbox" id="p2-2"><label for="p2-2">Sketch the general arrangement: wingspan, tail type (twin-fin vs. single vertical stabilizer), fuselage/pod layout, and where the tilt servos live.</label></li>
           <li class="check-item"><input type="checkbox" id="p2-3"><label for="p2-3">Decide fabrication method: FDM 3D printing (matches MiniHawk's approach, good for a mechatronics-heavy build with iteration) vs. foam-and-balsa (lighter, more traditional, less design freedom for the tilt nacelles).</label></li>
           <li class="check-item"><input type="checkbox" id="p2-4"><label for="p2-4">Set up Fusion (free for students with a .edu email) and work through 2&ndash;3 short tutorials before starting the real model.</label></li>
@@ -446,6 +452,9 @@
             <li><a href="https://docs.px4.io/main/en/frames_vtol/vtol_tiltrotor_eflite_convergence_pixfalcon" target="_blank" rel="noopener">E-flite Convergence (PX4 reference)</a></li>
             <li><a href="https://discuss.px4.io/t/tricopter-vtol-plane/32556" target="_blank" rel="noopener">Tricopter VTOL plane build thread</a> (PX4/Dronecode forum)</li>
             <li><a href="research/reference-design-stallion.html">Flightory Stallion VTOL</a> &mdash; documented tilt-rotor reference design (build vs. custom comparison)</li>
+            <li><a href="https://flightory.com/product/stallion/" target="_blank" rel="noopener">Stallion base airframe (Flightory)</a> &mdash; the 3D-printed fixed-wing files this project's v1 is built from.</li>
+            <li><a href="https://flightory.com/product/stallion-vtol/" target="_blank" rel="noopener">Stallion VTOL conversion pack (Flightory)</a> &mdash; converts the base airframe to the same 2-tilt-motor + 1-fixed-motor layout as this project.</li>
+            <li><a href="https://dronexl.co/2025/04/04/3d-printed-stallion-drone-diy-fixed-wing/" target="_blank" rel="noopener">3D-Printed Stallion Drone (DroneXL)</a> &mdash; background writeup on the Stallion's design and build process.</li>
           </ul>
         </div>
         <div class="lib-cat">
