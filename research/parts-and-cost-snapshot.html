@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parts &amp; Cost Snapshot &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="index.html" aria-current="page">Research &amp; Principles</a>
+      <a href="../landscape/index.html">Landscape</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:1100px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Research &amp; Principles &middot; 10</span>
+      <h1>Parts &amp; Cost Snapshot</h1>
+      <p class="sub">Specific current products, vendors, and approximate prices &mdash; the perishable companion to the durable buying criteria in the <a href="component-selection-guide.html">Component Selection Guide</a>. Use that page to judge <em>any</em> product against; use this one only as a dated example of what's actually on the shelf right now.</p>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">Snapshot notice</span>
+      <h3>Snapshot as of August 29, 2026 &mdash; verify current pricing and availability before ordering</h3>
+      <p>Every product, price, and vendor listed below was real and independently checked at the time this page was written. Specific products go out of stock, get revised, and change price constantly in this hobby &mdash; treat everything here as a dated example, not a live catalog. If you're reading this more than a few months after the date above, re-verify before you order anything.</p>
+    </div>
+
+    <div class="article">
+      <p class="lede">Two size classes, matching this project's own documentation: the ~700&ndash;900mm custom class this project originally budgeted around, and the Stallion-class ~1340mm build this project's v1 actually is (see <a href="reference-design-stallion.html">Reference Design: Flightory Stallion VTOL</a>). Quantities assume 3 motors, 3 ESCs, 2 tilt servos + 2 elevon/ruddervator servos, 1 flight controller, and 2 batteries &mdash; adjust for your own build.</p>
+
+      <h2>~700&ndash;900mm custom class</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Example product</th><th>Qty</th><th class="num">Unit price</th><th class="num">Subtotal</th><th>Source</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Motor (tilt/rear)</td><td>EMAX ECO II 2306 2400KV</td><td>3</td><td class="num">$19.49</td><td class="num">$58.47</td><td><a href="https://www.racedayquads.com/products/emax-eco-ii-2306-2400kv-motor" target="_blank" rel="noopener">RaceDayQuads</a></td></tr>
+            <tr><td>ESC</td><td>T-Motor F35A single ESC (35A cont.)</td><td>3</td><td class="num">$36.99</td><td class="num">$110.97</td><td><a href="https://www.racedayquads.com/products/t-motor-f35a-3-6s-am32-single-esc" target="_blank" rel="noopener">RaceDayQuads</a></td></tr>
+            <tr><td>Tilt servo</td><td>Kingmax KM1203MD (9.5kg&middot;cm, 0.08s/60&deg;)</td><td>2</td><td class="num">$35.00</td><td class="num">$70.00</td><td><a href="https://www.kingmaxservos.com/all-products.html" target="_blank" rel="noopener">Kingmax</a></td></tr>
+            <tr><td>Elevon servo</td><td>TowerPro MG90S (2.0kg&middot;cm)</td><td>2</td><td class="num">$3.02</td><td class="num">$6.04</td><td><a href="https://www.readymaderc.com/products/details/86506-towerpro-mg90s-metal-gear-servo-90-degree-rotation" target="_blank" rel="noopener">ReadyMadeRC</a></td></tr>
+            <tr><td>Flight controller</td><td>Teensy 4.0 (dRehmFlight)</td><td>1</td><td class="num">$23.80</td><td class="num">$23.80</td><td><a href="https://www.sparkfun.com/teensy-4-0.html" target="_blank" rel="noopener">SparkFun</a></td></tr>
+            <tr><td>Battery (4S)</td><td>RDQ Series 4S 1300mAh 100C</td><td>2</td><td class="num">$28.49</td><td class="num">$56.98</td><td><a href="https://www.racedayquads.com/products/rdq-series-14-8v-4s-1300mah-100c-lipo-battery-xt60" target="_blank" rel="noopener">RaceDayQuads</a></td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="4">Electronics subtotal</td><td class="num">$326.26</td><td>Airframe/fabrication cost not included &mdash; varies by design</td></tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <h2>Stallion class (~1340mm)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Example product</th><th>Qty</th><th class="num">Unit price</th><th class="num">Subtotal</th><th>Source</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Motor (tilt/rear)</td><td>EMAX ECO II 2807 1300KV</td><td>3</td><td class="num">$23.99</td><td class="num">$71.97</td><td><a href="https://www.racedayquads.com/products/emax-eco-ii-2807-1300kv-motor" target="_blank" rel="noopener">RaceDayQuads</a></td></tr>
+            <tr><td>ESC</td><td>T-Motor F35A single ESC (35A cont.)</td><td>3</td><td class="num">$36.99</td><td class="num">$110.97</td><td><a href="https://www.racedayquads.com/products/t-motor-f35a-3-6s-am32-single-esc" target="_blank" rel="noopener">RaceDayQuads</a></td></tr>
+            <tr><td>Tilt servo</td><td>Kingmax KM1203MD (9.5kg&middot;cm, 0.08s/60&deg;)</td><td>2</td><td class="num">$35.00</td><td class="num">$70.00</td><td><a href="https://www.kingmaxservos.com/all-products.html" target="_blank" rel="noopener">Kingmax</a></td></tr>
+            <tr><td>Ruddervator servo</td><td>TowerPro MG90S (2.0kg&middot;cm)</td><td>2</td><td class="num">$3.02</td><td class="num">$6.04</td><td><a href="https://www.readymaderc.com/products/details/86506-towerpro-mg90s-metal-gear-servo-90-degree-rotation" target="_blank" rel="noopener">ReadyMadeRC</a></td></tr>
+            <tr><td>Flight controller</td><td>SpeedyBee F405 WING APP (ArduPilot)</td><td>1</td><td class="num">$47.99</td><td class="num">$47.99</td><td><a href="https://www.racedayquads.com/products/speedybee-f405-wing-app-fixed-wing-flight-controller" target="_blank" rel="noopener">RaceDayQuads</a></td></tr>
+            <tr><td>Battery (4S)</td><td>Tattu 4S 5200mAh 35C</td><td>2</td><td class="num">$85.49</td><td class="num">$170.98</td><td><a href="https://www.racedayquads.com/products/tattu-14-8v-4s-5200mah-35c-lipo-battery-xt60" target="_blank" rel="noopener">RaceDayQuads</a></td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="4">Electronics subtotal</td><td class="num">$477.95</td><td>Add the Stallion's own $49.98 file cost &mdash; see Reference Design page</td></tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <h2>Caveats on this snapshot</h2>
+      <ul>
+        <li>The T-Motor F35A ESC listed above is rated 35A continuous, slightly under Flightory's own 45A recommendation for the Stallion VTOL pack &mdash; it's included as a real, currently-available example, not a perfect spec match. A genuinely 45A+ single ESC exists (e.g. Lumenier 51A BLHeli_32), but its price could only be confirmed via search snippet (not independently fetched from the vendor page), and it was showing as backordered at the time of this research &mdash; check current availability before relying on it.</li>
+        <li>GetFPV (one of this project's own cited vendors) blocks automated fetching, so nothing from GetFPV specifically is included here &mdash; RaceDayQuads, SparkFun, ReadyMadeRC, and Kingmax's own site are all directly, independently verified.</li>
+        <li>No distinct smaller/cheaper tilt servo specific to the 700&ndash;900mm class was found during this research &mdash; the same Kingmax KM1203MD is listed for both classes as a genuinely reasonable part at both scales, not because a class-appropriate cheaper option doesn't exist.</li>
+        <li>The ruddervator/tail-servo spec for the Stallion's V-tail specifically isn't documented anywhere found &mdash; the elevon-class servo listed for it is an approximation, not a confirmed Flightory recommendation.</li>
+      </ul>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">More in this section</span>
+      <ul>
+        <li><a href="aerodynamics-lift-airfoils.html">Aerodynamics &amp; Airfoil Design</a></li>
+        <li><a href="propulsion-motors-propellers.html">Propulsion: Propellers, Motors, ESCs &amp; Batteries</a></li>
+        <li><a href="vtol-transition-aerodynamics.html">VTOL Transition Aerodynamics</a></li>
+        <li><a href="flight-control-pid.html">Flight Control &amp; PID Tuning</a></li>
+        <li><a href="structures-and-materials.html">Structures &amp; Materials</a></li>
+        <li><a href="regulations-and-safety.html">Regulations &amp; Safety</a></li>
+        <li><a href="reference-design-stallion.html">Reference Design: Flightory Stallion VTOL</a></li>
+        <li><a href="airframe-and-body-design.html">Airframe &amp; Body Design</a></li>
+        <li><a href="component-selection-guide.html">Component Selection Guide</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Research &amp; Principles</span>
+      <span><a href="index.html">&larr; Back to Research &amp; Principles</a></span>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
