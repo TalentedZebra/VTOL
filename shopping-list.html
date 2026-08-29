@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopping List &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="index.html">Build Manual</a>
+      <a href="research/index.html">Research &amp; Principles</a>
+      <a href="landscape/index.html">Landscape</a>
+      <a href="shopping-list.html" aria-current="page">Shopping List</a>
+      <a href="log/index.html">Build Log</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:900px; margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Field manual</span>
+      <h1>Shopping List</h1>
+      <p class="sub">Every part mentioned across the build manual &mdash; Phase 04's ordering checklist, the budget table, and the FAA registration/Remote ID line items &mdash; pulled together into one master checklist. Check items off as you order them; progress is saved locally in this browser, the same way the phase checklists work. This page is hand-authored to mirror <a href="index.html#p4">Phase 04</a> and the <a href="index.html#budget">budget table</a> &mdash; it isn't generated from them, so if those change later, this list needs a matching update.</p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="rail-title">Shopping progress</div>
+      <span class="progress-pct"><span id="pct">0</span>% complete</span>
+      <div class="progress-track"><div class="progress-fill" id="pctFill"></div></div>
+    </div>
+
+    <ul class="checklist" data-phase="shop">
+      <li class="check-item"><input type="checkbox" id="shop-1"><label for="shop-1"><strong>Flight controller</strong> &mdash; Teensy 4.0 for dRehmFlight, or a Pixhawk/Matek F405-class board for ArduPilot, per <a href="index.html">Decision 3</a>. Typical range: $25&ndash;150. <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a>.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-2"><label for="shop-2"><strong>Motors (3)</strong> &mdash; 2 matched tilt (front) motors + 1 rear motor, sized in Phase 03. Typical range: $45&ndash;90. <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a>.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-3"><label for="shop-3"><strong>ESCs (3)</strong> &mdash; rated well above your calculated peak current, headroom prevents thermal failure in sustained hover. Typical range: $45&ndash;75. <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a>.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-4"><label for="shop-4"><strong>Servos (4)</strong> &mdash; 2 for motor tilt (need real torque/speed margin to move a live motor nacelle, not a control-surface-grade servo) + 2 for elevons. Typical range: $30&ndash;70. <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a> / local hobby shop.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-5"><label for="shop-5"><strong>Radio system</strong> &mdash; transmitter + receiver matched to your protocol; one-time cost if you don't already own a transmitter. Typical range: $100&ndash;250. <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a>.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-6"><label for="shop-6"><strong>Batteries + charger</strong> &mdash; 2&ndash;3 LiPo packs (fly one, charge one), a proper LiPo-safe charger, and a fireproof storage bag/case. Typical range: $100&ndash;180. <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a>.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-7"><label for="shop-7"><strong>Propellers (2&ndash;3 sets)</strong> &mdash; a couple of pitch/diameter options near your calculated target, since real performance rarely matches the calculator exactly. Typical range: $20&ndash;40. <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a>.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-8"><label for="shop-8"><strong>Airframe materials</strong> &mdash; filament, foam, or balsa plus hardware, depending on the fabrication method chosen in Phase 02. Typical range: $40&ndash;100. Local hobby shop or online, depending on method.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-9"><label for="shop-9"><strong>Misc / consumables</strong> &mdash; CA glue/epoxy, control horns, pushrods, ball links, connectors, wire, tools. Always more than you think. Typical range: $40&ndash;80. Local hobby shop.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-10"><label for="shop-10"><strong>FAA registration</strong> &mdash; $5 one-time fee once you know the aircraft will be over 250g; do it through the official <a href="https://faadronezone-access.faa.gov/" target="_blank" rel="noopener">FAA DroneZone</a> portal, not a paid third-party lookalike site. The TRUST test itself is free.</label></li>
+      <li class="check-item"><input type="checkbox" id="shop-11"><label for="shop-11"><strong>Remote ID module</strong> &mdash; $0 if your flight controller broadcasts Remote ID natively or you'll only fly at an AMA field/FRIA that doesn't require it; otherwise budget up to ~$150 for a standalone module (dRehmFlight has no built-in Remote ID). <a href="https://www.getfpv.com/" target="_blank" rel="noopener">GetFPV</a> / <a href="https://www.racedayquads.com/" target="_blank" rel="noopener">RaceDayQuads</a>.</label></li>
+    </ul>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Shopping List</span>
+      <span><a href="index.html">&larr; Back to the build manual</a></span>
+    </footer>
+  </main>
+</div>
+
+<script src="assets/progress.js"></script>
+</body>
+</html>
