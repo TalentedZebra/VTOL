@@ -78,6 +78,20 @@ experience — the goal is to actually understand the underlying engineering (ae
 propulsion, controls, structures), not just end up with a flying aircraft. Explanations
 and new content should teach the *why*, not just state a conclusion.
 
+## ARS standing preferences
+
+- This is engineering/hobbyist research for a personal VTOL build, not academic
+  publishing — don't default to peer-reviewed-only sourcing.
+- Acceptable sources: manufacturer datasheets/specs, established open-source aerospace/RC
+  projects (e.g. ArduPilot, dRehmFlight, PX4 docs), reputable hobbyist technical
+  references (e.g. Oscar Liang, mh-aerotools, eCalc), and regulatory bodies (FAA, AMA) —
+  alongside academic literature when it exists (e.g. tiltrotor aerodynamics papers).
+- Citation style: a clear link + source title is sufficient; APA formatting only needed
+  if producing a formal write-up (e.g. the Phase 09 project report).
+- Default to deep-research's quick or socratic mode for day-to-day questions; reserve
+  systematic-review/meta-analysis mode for when I explicitly ask for a literature review.
+- Always add real, working links — never a fabricated citation.
+
 ## Git workflow — non-negotiable for any change to the site
 
 - Always work on a new branch for any change (`git checkout -b <descriptive-name>`).
