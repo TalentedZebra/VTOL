@@ -164,6 +164,16 @@ this file and renders entries newest-first; it has no other data source.
   `log/index.html` itself, and everything else in the repo, still goes through the normal
   branch → commit → push → PR flow, including the initial creation of the `log/` structure.
 
+## Quiz me
+
+On request ("quiz me on X," "test my understanding of X") — or proactively offered
+(never auto-started) right after a new/substantially-updated `research/`/`landscape/`
+page — generate quiz questions grounded in that page's actual current file content
+(read it fresh, don't rely on memory of what it used to say), mostly applied/reasoning
+questions rather than recall, evaluate answers with an explanation rather than a bare
+right/wrong, and adapt difficulty based on how the user is doing. Purely conversational;
+no site files involved. See `.claude/agents/vtol-engineer.md`'s Job 5 for the full detail.
+
 ## Who this is for
 
 Built by a Multidisciplinary Engineering Technology (Mechatronics track) student at
