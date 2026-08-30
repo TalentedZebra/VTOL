@@ -13,7 +13,7 @@
   border-bottom:1px solid var(--line-strong);
 }
 .sitenav-inner{
-  max-width:1160px;
+  max-width:min(1600px, 95vw);
   margin:0 auto;
   display:flex;
   align-items:center;
@@ -108,7 +108,9 @@
 }
 
 /* ---------- research article body ---------- */
-.article{ max-width:74ch; }
+/* No max-width on the container itself — tables/equations need full width;
+   prose elements (p, ul) cap their own width below instead. */
+.article{ max-width:none; }
 .article h2{ font-size:1.5rem; margin:40px 0 14px; }
 .article h2:first-child{ margin-top:0; }
 .article h3{ font-size:1.15rem; margin:22px 0 10px; text-transform:none; letter-spacing:0; }

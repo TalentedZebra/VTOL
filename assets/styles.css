@@ -101,8 +101,8 @@
   /* ---------- shell layout ---------- */
   .shell{
     display:grid;
-    grid-template-columns: 236px minmax(0,1fr);
-    max-width:1160px;
+    grid-template-columns: 260px minmax(0,1fr);
+    max-width:min(1600px, 95vw);
     margin:0 auto;
     align-items:start;
   }
