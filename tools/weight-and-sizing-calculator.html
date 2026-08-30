@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weight &amp; Sizing Calculator &mdash; Tricopter VTOL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="sitenav-inner">
+    <span class="sitenav-brand">Tricopter VTOL</span>
+    <div class="sitenav-links">
+      <a href="../index.html">Build Manual</a>
+      <a href="../research/index.html">Research &amp; Principles</a>
+      <a href="../landscape/index.html">Landscape</a>
+      <a href="index.html" aria-current="page">Tools</a>
+      <a href="../shopping-list.html">Shopping List</a>
+      <a href="../log/index.html">Build Log</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell" style="grid-template-columns:1fr;">
+  <main style="max-width:min(1400px, 95vw); margin:0 auto;">
+    <div class="page-header">
+      <span class="eyebrow">Tools</span>
+      <h1>Weight &amp; Sizing Calculator</h1>
+      <p class="sub">Three linked checks for Phase 03 sizing: a running weight-and-CG table, hover thrust margin, and wing loading. Everything computes live as you type, in your browser only &mdash; nothing is sent anywhere.</p>
+    </div>
+
+    <div class="tool-panel">
+      <span class="eyebrow">01 &middot; Weight &amp; CG</span>
+      <h2>Weight &amp; center-of-gravity table</h2>
+      <p class="tool-intro">Pick your own reference point &mdash; the nose is the usual choice &mdash; and measure every component's distance from it consistently. This tool doesn't need to know which point you chose; it only needs those distances to be measured from the same point every time. CG position is computed with the standard moment method: CG = &Sigma;(weight<sub>i</sub> &times; distance<sub>i</sub>) &divide; &Sigma;(weight<sub>i</sub>). See <a href="../research/structures-and-materials.html">Structures &amp; Materials</a>'s "Weight and CG budgeting" section for why this matters and why a physical balance check before first flight still beats trusting the spreadsheet alone. Rows are saved in this browser's local storage, so they'll survive a reload here &mdash; but won't follow you to another device.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Component</th><th class="num">Weight (g)</th><th class="num">Distance from reference (mm)</th><th></th></tr>
+          </thead>
+          <tbody id="wcg-tbody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;">
+        <button type="button" id="wcg-add-row" class="btn">+ Add component</button>
+      </div>
+
+      <div class="tool-stats">
+        <div class="tool-stat">
+          <span class="k">Total weight</span>
+          <span class="v"><span id="wcg-total-weight">0.0</span><span class="unit">g</span></span>
+        </div>
+        <div class="tool-stat">
+          <span class="k">CG position</span>
+          <span class="v"><span id="wcg-cg-position">&mdash;</span><span class="unit">mm from your reference point</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-panel">
+      <span class="eyebrow">02 &middot; Thrust margin (hover)</span>
+      <h2>Hover thrust-to-weight ratio</h2>
+      <p class="tool-intro">Matches the sizing rule already in <a href="../index.html#p3">Phase 03</a> of the build manual and the <a href="../research/component-selection-guide.html">Component Selection Guide</a>'s Motors section: total thrust across all motors should be at least 2&times; all-up weight, for margin against wind, maneuvering, and battery sag. Below 2&times; is flagged marginal, and below 1.5&times; is flagged insufficient &mdash; same thresholds, applied live to your own numbers.</p>
+
+      <div class="tool-form-row">
+        <div class="tool-field">
+          <label for="tm-motor-thrust">Per-motor rated thrust</label>
+          <input type="number" step="any" min="0" id="tm-motor-thrust" class="tool-input" placeholder="e.g. 900">
+          <span class="hint">Grams-force, at the prop/voltage you'll actually fly.</span>
+        </div>
+        <div class="tool-field">
+          <label for="tm-motor-count">Motor count</label>
+          <input type="number" step="1" min="1" id="tm-motor-count" class="tool-input" value="3">
+        </div>
+        <div class="tool-field">
+          <label for="tm-weight">Total weight (g)</label>
+          <input type="number" step="any" min="0" id="tm-weight" class="tool-input" placeholder="e.g. 2200">
+        </div>
+        <div class="tool-field">
+          <button type="button" id="tm-use-total" class="btn btn-sm">Use Weight &amp; CG total (0.0 g)</button>
+        </div>
+      </div>
+
+      <div class="tool-stats">
+        <div class="tool-stat">
+          <span class="k">Total thrust</span>
+          <span class="v"><span id="tm-total-thrust">0</span><span class="unit">gf</span></span>
+        </div>
+        <div class="tool-stat">
+          <span class="k">Thrust &divide; weight</span>
+          <span class="v"><span id="tm-ratio">&mdash;</span></span>
+        </div>
+        <div class="tool-stat">
+          <span class="k">Status</span>
+          <span class="v"><span class="pill optional" id="tm-status">Enter thrust and weight</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-panel">
+      <span class="eyebrow">03 &middot; Wing loading</span>
+      <h2>Wing loading (g/dm&sup2;)</h2>
+      <p class="tool-intro">See <a href="../research/structures-and-materials.html">Structures &amp; Materials</a> for the full discussion of why wing loading is the single number that most shapes how forgiving an aircraft is to fly (that page is not repeated here). The qualitative bands below are synthesized from real RC-design references, not a single universal standard &mdash; treat them as an informed approximation, and see the citations under the page for exactly where each number comes from.</p>
+
+      <div class="tool-radio-row">
+        <label><input type="radio" name="wl-mode" id="wl-mode-direct" checked> Enter wing area directly</label>
+        <label><input type="radio" name="wl-mode" id="wl-mode-spanchord"> Compute from wingspan &amp; average chord</label>
+      </div>
+
+      <div class="tool-form-row">
+        <div class="tool-field">
+          <label for="wl-weight">Weight (g)</label>
+          <input type="number" step="any" min="0" id="wl-weight" class="tool-input" placeholder="e.g. 2200">
+        </div>
+        <div class="tool-field">
+          <button type="button" id="wl-use-total" class="btn btn-sm">Use Weight &amp; CG total (0.0 g)</button>
+        </div>
+      </div>
+
+      <div class="tool-form-row" id="wl-direct-fields">
+        <div class="tool-field">
+          <label for="wl-area-direct">Wing area (dm&sup2;)</label>
+          <input type="number" step="any" min="0" id="wl-area-direct" class="tool-input" placeholder="e.g. 32">
+        </div>
+      </div>
+      <div class="tool-form-row" id="wl-spanchord-fields" hidden>
+        <div class="tool-field">
+          <label for="wl-wingspan">Wingspan (mm)</label>
+          <input type="number" step="any" min="0" id="wl-wingspan" class="tool-input" placeholder="e.g. 900">
+        </div>
+        <div class="tool-field">
+          <label for="wl-chord">Average chord (mm)</label>
+          <input type="number" step="any" min="0" id="wl-chord" class="tool-input" placeholder="e.g. 220">
+        </div>
+      </div>
+
+      <div class="tool-stats">
+        <div class="tool-stat">
+          <span class="k">Wing area</span>
+          <span class="v"><span id="wl-area">&mdash;</span><span class="unit">dm&sup2;</span></span>
+        </div>
+        <div class="tool-stat">
+          <span class="k">Wing loading</span>
+          <span class="v"><span id="wl-loading">&mdash;</span><span class="unit">g/dm&sup2;</span></span>
+        </div>
+        <div class="tool-stat">
+          <span class="k">What that means</span>
+          <span class="v"><span class="pill optional" id="wl-tier">Enter weight and wing area</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources">
+      <span class="eyebrow">Where the wing-loading bands come from</span>
+      <ul>
+        <li><a href="https://codingace.net/general/wing_loading_rc.html" target="_blank" rel="noopener">RC Wing Loading Calculator &mdash; codingace.net</a> &mdash; a three-tier example (trainer ~32 g/dm&sup2; "light and forgiving," sport ~53 g/dm&sup2; "moderate and responsive," scale warbird ~76 g/dm&sup2; "fast and demanding") that the bands above are built around.</li>
+        <li><a href="https://sites.nd.edu/ame40462/files/2018/03/TrainerScaling.pdf" target="_blank" rel="noopener">Trainer Design &mdash; University of Notre Dame AME 40462 course notes (PDF)</a> &mdash; gives ~60 g/dm&sup2; as a typical value for a 60"-span trainer, and notes wing loading needs to run lower on smaller models &mdash; consistent with, and one more data point behind, the bands above.</li>
+      </ul>
+    </div>
+
+    <footer>
+      <span>Tricopter VTOL manual &middot; Tools</span>
+      <span><a href="index.html">&larr; Back to Tools</a></span>
+    </footer>
+  </main>
+</div>
+
+<script src="../assets/calculator.js"></script>
+</body>
+</html>
