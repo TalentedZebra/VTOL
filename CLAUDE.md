@@ -32,6 +32,11 @@ see "The Landscape section" below for the separation rule between them.
   `landscape/index.html` is the hub (with a cross-design comparison table);
   `landscape/<design-name>.html` is one profile page per design. See "The Landscape
   section" below for what belongs here vs. in `research/`.
+- `tools/` — interactive, real client-side-JS calculators (not static content):
+  `tools/index.html` is the hub; `tools/weight-and-sizing-calculator.html` is the first
+  tool (weight/CG table, hover thrust-margin check, wing loading). Any real math here
+  needs to actually be tested against a hand-worked example before committing, not just
+  visually inspected — see `assets/calculator.js`.
 - `assets/styles.css` — the complete design system (colors, type, every component
   class). Reuse as-is; never redesign or restyle from scratch.
 - `assets/site.css` — small additive stylesheet layered on top of `styles.css` for
@@ -40,6 +45,9 @@ see "The Landscape section" below for the separation rule between them.
   touch `styles.css` itself.
 - `assets/progress.js` — the checklist-progress-tracking script. Include on any page
   with `.checklist` elements; safe to include everywhere else too.
+- `assets/calculator.js` — logic for `tools/weight-and-sizing-calculator.html` (and any
+  future interactive tool). Vanilla JS, no build step, same IIFE/localStorage pattern as
+  `progress.js`.
 - `shopping-list.html` — one master ordering checklist pulling together every part
   mentioned across Phase 04 and the budget table (motors, ESCs, servos, FC, radio,
   batteries, propellers, airframe materials, consumables, FAA registration, Remote ID).
