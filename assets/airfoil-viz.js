@@ -12,6 +12,9 @@
   var CRITICAL_AOA = 16; // degrees; matches the "typically 15-18 deg" range added to the page text
   var SEP_FORWARD_RATE = 0.05; // how fast (in xc per extra degree) the separation point marches toward the LE
   var MIN_SEP_XC = 0.22;
+  var STALL_RAMP_DEG = 6; // degrees past critical over which turbulence intensity ramps 0 -> 1 (reaches "fully developed" right at the slider's 22 deg max)
+  var WAKE_AMP_MAX = 16; // px, wake wobble amplitude once fully ramped
+  var NEAR_AMP_MAX = 22; // px, near-surface turbulence amplitude once fully ramped
 
   var hasInteracted = false;
   var rafId = null;
@@ -99,16 +102,26 @@
     return t * t * (3 - 2 * t);
   }
 
+  // Continuous 0 (well-attached) -> 1 (fully developed) stall intensity as a function
+  // of angle of attack alone. This — not a boolean — drives every turbulence/downwash
+  // magnitude below, so nothing snaps: at CRITICAL_AOA it's exactly 0, and it grows
+  // smoothly to 1 by CRITICAL_AOA + STALL_RAMP_DEG (the slider's max, 22 deg).
+  function stallFraction(aoaDeg){
+    var over = Math.max(0, aoaDeg - CRITICAL_AOA);
+    return Math.min(1, over / STALL_RAMP_DEG);
+  }
+
   function separationXc(aoaDeg){
-    if (aoaDeg <= CRITICAL_AOA) return 1.05; // no separation; keep just past TE
-    var xc = 1.0 - (aoaDeg - CRITICAL_AOA) * SEP_FORWARD_RATE;
+    var over = Math.max(0, aoaDeg - CRITICAL_AOA);
+    var xc = 1.0 - over * SEP_FORWARD_RATE; // continuous: exactly 1.0 at/below the critical angle, marches forward smoothly above it
     return Math.max(MIN_SEP_XC, xc);
   }
 
   function buildStreamline(lane, aoaDeg, t){
     var aRad = aoaDeg * Math.PI / 180;
-    var sepXc = lane.side === 'u' ? separationXc(aoaDeg) : 1.05;
-    var stalled = aoaDeg > CRITICAL_AOA && lane.side === 'u';
+    var isUpper = lane.side === 'u';
+    var sepXc = isUpper ? separationXc(aoaDeg) : 1.05;
+    var stallFrac = isUpper ? stallFraction(aoaDeg) : 0; // continuous 0..1, only the upper surface stalls
 
     // near-field: sample xc from -0.18 to 1.18
     var near = [];
@@ -121,13 +134,18 @@
       var dir = lane.side === 'u' ? -1 : 1; // stand-off moves further away from body
       var ly = baseLocalY + dir * lane.standoff;
 
-      // turbulence past the separation point (upper lanes only, once stalled)
-      if (stalled && xc > sepXc) {
+      // turbulence past the separation point: amplitude is continuous in both how far
+      // past critical AoA we are (stallFrac) and how far past the local separation
+      // point this sample is (spatial) -- no boolean gate, so it can't snap.
+      if (xc > sepXc) {
         var distPast = xc - sepXc;
-        var amp = Math.min(22, distPast * 60 + (aoaDeg - CRITICAL_AOA) * 0.9);
-        var wiggle = Math.sin(xc * 26 + t * 3.2 + lane.standoff) * amp
-                   + Math.sin(xc * 53 + t * 5.1 + lane.standoff * 1.7) * amp * 0.35;
-        ly += wiggle * (dir); // push turbulence outward-biased
+        var spatial = Math.min(1, distPast / 0.14);
+        var amp = stallFrac * NEAR_AMP_MAX * spatial;
+        if (amp > 0.01) {
+          var wiggle = Math.sin(xc * 26 + t * 3.2 + lane.standoff) * amp
+                     + Math.sin(xc * 53 + t * 5.1 + lane.standoff * 1.7) * amp * 0.35;
+          ly += wiggle * (dir); // push turbulence outward-biased
+        }
       }
 
       var lx = localX(xcClamped) + (xc < 0 ? xc * chordPx : (xc > 1 ? (xc - 1) * chordPx : 0));
@@ -158,7 +176,7 @@
     var closeness = 1 - Math.min(1, (lane.standoff - 10) / 40); // 1.0 for innermost lane, ~0.15 for outermost
     var aoaFactor = Math.max(0, aoaDeg + 3) / 20; // small downwash even near zero AoA (cambered airfoil), grows with AoA
     var downwashRate = 0.55 * closeness * aoaFactor;
-    if (stalled) downwashRate *= 0.4; // separated flow produces much less orderly downwash right at the wing
+    downwashRate *= (1 - 0.6 * stallFrac); // continuous: separated flow produces progressively less orderly downwash, not a step drop
 
     for (var d = 0; d <= downSamples; d++) {
       var dx = exit.x + (wakeEndX - exit.x) * (d / downSamples);
@@ -166,8 +184,8 @@
       var blended = Math.min(1, travelled / blendDist);
       var rampY = exit.y + downwashRate * blendDist * easeInOut(blended) + downwashRate * Math.max(0, travelled - blendDist);
       var dy = rampY;
-      if (stalled) {
-        var amp2 = 14 + (aoaDeg - CRITICAL_AOA) * 0.6;
+      var amp2 = stallFrac * WAKE_AMP_MAX; // continuous: 0 at the critical angle, grows smoothly above it
+      if (amp2 > 0.01) {
         dy += Math.sin(dx * 0.09 + t * 3.2 + lane.standoff) * amp2 * Math.min(1, travelled / 60);
       }
       downstream.push({ x: dx, y: dy });

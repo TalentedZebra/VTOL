@@ -59,6 +59,7 @@
     </div>
 
     <div class="tool-panel">
+      <span class="eyebrow">Interactive &middot; angle of attack</span>
       <h3>Try it: angle of attack, streamlines, and stall</h3>
       <p class="tool-intro">Drag the slider to change angle of attack. Streamlines curve <em>downward</em> as they leave the trailing edge &mdash; that's the real downwash this page's lift explanation describes, not the "equal transit time" myth debunked above (no paired particles racing to meet back up at the trailing edge here). Push AoA past the critical angle and watch the upper-surface flow separate, starting near the trailing edge and creeping forward as AoA increases further &mdash; a visual stall. This is an illustrative schematic airfoil, not a CFD result or a specific real airfoil's measured flow.</p>
       <div class="viz-canvas-wrap">
@@ -70,6 +71,29 @@
           <input type="range" id="aoa-slider" class="tool-input" min="-5" max="22" step="0.5" value="6">
         </div>
         <span class="pill bad" id="airfoil-stall-badge" hidden>Stalled &mdash; flow separated</span>
+      </div>
+    </div>
+
+    <div class="tool-panel">
+      <span class="eyebrow">Interactive &middot; airfoil shape</span>
+      <h3>Try it: camber, thickness, and lift</h3>
+      <p class="tool-intro">This one holds angle of attack fixed at a small 4&deg; and varies the airfoil's <em>shape</em> instead, to isolate what camber and thickness actually do. More camber visibly increases how much the flow turns and how far it's pushed down behind the trailing edge &mdash; the same real downwash mechanism from this page's lift explanation, not the equal-transit-time myth. The computed C<sub>L</sub> number below is an <strong>illustrative simplified model</strong> (thin-airfoil-theory-style C<sub>L</sub> &asymp; 2&pi;(&alpha; + 2m), where m is camber) &mdash; not a CFD or wind-tunnel result for a specific real airfoil. Thickness changes the drawn shape and flow pattern but, in this simplified model, doesn't move the C<sub>L</sub> number itself: to first order in thin-airfoil theory, thickness affects drag and stall behavior, not lift.</p>
+      <div class="viz-canvas-wrap">
+        <canvas id="airfoil-shape-canvas" role="img" aria-label="Interactive diagram of an airfoil cross-section with adjustable camber and thickness, showing how the streamline pattern and downwash change with shape"></canvas>
+      </div>
+      <div class="tool-form-row">
+        <div class="tool-field">
+          <label for="shape-camber-slider">Camber: <span class="num-readout"><span id="shape-camber-value">2.0</span>%</span></label>
+          <input type="range" id="shape-camber-slider" class="tool-input" min="0" max="9" step="0.5" value="2">
+        </div>
+        <div class="tool-field">
+          <label for="shape-thickness-slider">Thickness: <span class="num-readout"><span id="shape-thickness-value">12</span>%</span></label>
+          <input type="range" id="shape-thickness-slider" class="tool-input" min="6" max="18" step="1" value="12">
+        </div>
+      </div>
+      <div class="tool-stats">
+        <div class="tool-stat"><span class="k">Angle of attack (fixed)</span><span class="v">4.0&deg;</span></div>
+        <div class="tool-stat"><span class="k">Illustrative C<sub>L</sub></span><span class="v"><span id="shape-cl-value">0.62</span></span></div>
       </div>
     </div>
 
@@ -118,5 +142,6 @@
 </div>
 
 <script src="../assets/airfoil-viz.js"></script>
+<script src="../assets/airfoil-shape-viz.js"></script>
 </body>
 </html>
