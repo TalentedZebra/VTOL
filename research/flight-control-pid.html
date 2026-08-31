@@ -43,7 +43,41 @@
         <li><strong>Integral (I)</strong> &mdash; accumulate error over time and correct for it. This is what eliminates steady-state error &mdash; for example, a persistent trim offset from a slightly heavy wingtip that P alone would never fully correct, because P only reacts to error that still exists right now. Too much I causes slow, growing oscillations ("wind-up").</li>
         <li><strong>Derivative (D)</strong> &mdash; react to how fast the error is changing, which acts as a brake against overshoot. Too little D and the aircraft overshoots and bounces around the target; too much D amplifies sensor noise into visible motor jitter, since D is mathematically a rate-of-change calculation and rate-of-change amplifies noise.</li>
       </ul>
+    </div>
 
+    <div class="tool-panel">
+      <h3>Try it: a simplified PID response simulator</h3>
+      <p class="tool-intro">This is an <strong>illustrative simplified model</strong>, not a real flight-dynamics simulation: one rotational axis (angle &theta;, angular velocity &omega;) driven by the PID controller's output as an angular acceleration, with light damping and a small constant disturbance torque (like a persistent trim imbalance) so integral action has something real to correct. Drag the sliders &mdash; the response to a step change in target recomputes instantly, no need to press anything.</p>
+      <div class="viz-canvas-wrap">
+        <canvas id="pid-canvas" role="img" aria-label="Graph of simulated system response to a step change in target, showing angle over time compared to the target angle"></canvas>
+      </div>
+      <div class="tool-form-row">
+        <div class="tool-field">
+          <label for="pid-kp">K<sub>p</sub>: <span class="num-readout"><span id="pid-kp-value">10.0</span></span></label>
+          <input type="range" id="pid-kp" class="tool-input" min="0" max="90" step="0.5" value="10">
+        </div>
+        <div class="tool-field">
+          <label for="pid-ki">K<sub>i</sub>: <span class="num-readout"><span id="pid-ki-value">2.00</span></span></label>
+          <input type="range" id="pid-ki" class="tool-input" min="0" max="6" step="0.25" value="2">
+        </div>
+        <div class="tool-field">
+          <label for="pid-kd">K<sub>d</sub>: <span class="num-readout"><span id="pid-kd-value">2.00</span></span></label>
+          <input type="range" id="pid-kd" class="tool-input" min="0" max="4" step="0.25" value="2">
+        </div>
+      </div>
+      <div class="tool-form-row">
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; cursor:pointer; margin:0;">
+          <input type="checkbox" id="pid-noise"> Inject sensor noise &mdash; shows why too much K<sub>d</sub> turns into jitter
+        </label>
+      </div>
+      <div class="tool-stats">
+        <div class="tool-stat"><span class="k">Final value</span><span class="v"><span id="pid-final">&mdash;</span></span></div>
+        <div class="tool-stat"><span class="k">Peak overshoot</span><span class="v"><span id="pid-overshoot">&mdash;</span></span></div>
+      </div>
+      <p class="tool-intro" style="margin:12px 0 0; font-size:0.85rem;">Try K<sub>p</sub>&asymp;1 alone first (sluggish, settles short of target), then K<sub>p</sub>&asymp;70&ndash;90 alone (bounces past target and back before settling), then bring K<sub>i</sub> and K<sub>d</sub> back in around their defaults (smooth, converges on target) &mdash; the three behaviors this page's P/I/D list describes above.</p>
+    </div>
+
+    <div class="article">
       <h2>Why tuning is done incrementally, one axis at a time</h2>
       <p>Pitch, roll, and yaw each get their own PID gains, and hover-mode gains are usually tuned completely separately from cruise-mode gains, because the aircraft's dynamics genuinely change between the two (different effective control authority, different disturbance sources, different mass distribution relative to the control inputs). The standard practical tuning method &mdash; and the one built into most guided tuning workflows &mdash; is: start with only P, raise it until you see the first hint of oscillation, back off slightly, then bring in D to damp overshoot, then bring in just enough I to kill any remaining steady-state drift. Changing more than one gain at a time makes it far harder to tell which change caused which behavior, which is why "one axis, one gain, one small change at a time" is the rule almost every tuning guide repeats.</p>
 
@@ -87,5 +121,6 @@
   </main>
 </div>
 
+<script src="../assets/pid-viz.js"></script>
 </body>
 </html>
