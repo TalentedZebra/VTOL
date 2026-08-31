@@ -263,7 +263,14 @@
     // AoA readout + stall badge
     if (valueEl) valueEl.textContent = aoaDeg.toFixed(1);
     if (stallBadge) {
-      stallBadge.hidden = !stalled;
+      // visibility, not the `hidden` attribute (display:none) -- the badge must keep
+      // reserving its layout box at all times so the slider track next to it in the
+      // same flex row never resizes. A track that resizes mid-drag desyncs the
+      // browser's native mouse-to-value mapping and was the real cause of the
+      // "jumps to fully stalled" bug: crossing the threshold mid-drag shrank the
+      // track out from under the drag, snapping the value to whatever the same
+      // mouse position now mapped to on the new, narrower track.
+      stallBadge.style.visibility = stalled ? 'visible' : 'hidden';
     }
     canvas.dataset.aoa = aoaDeg.toFixed(1);
     canvas.dataset.stalled = stalled ? 'true' : 'false';
